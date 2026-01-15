@@ -108,7 +108,15 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
   }
 
   const handleDateChange = (date: Date | undefined) => {
-    updateFormField('date', date)
+    if (date) {
+      // Preserve the current time or set to current time if date was previously undefined
+      const currentDate = formState.date || new Date()
+      const newDate = new Date(date)
+      newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds())
+      updateFormField('date', newDate)
+    } else {
+      updateFormField('date', date)
+    }
   }
 
   const toggleComment = () => {
