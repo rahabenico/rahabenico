@@ -15,12 +15,11 @@ import {
 import { EntryForm } from "@/components/EntryForm";
 import { EntryCard } from "@/components/EntryCard";
 
-function Card() {
+function CardView() {
   const { id } = useParams<{ id: string }>()
   const [searchParams] = useSearchParams()
-  const editKey = searchParams.get('editable')
   const [isOpen, setIsOpen] = useState(false)
-  const [hasEnteredEntry, setHasEnteredEntry] = useLocalStorageFlag("entry-entered")
+  const [hasEnteredEntry, setHasEnteredEntry] = useLocalStorageFlag(`entry-entered-${id}`)
 
   const { card, entries, isLoading } = useCardData(id)
 
@@ -46,23 +45,19 @@ function Card() {
     return <div>Card not found</div>
   }
 
-  // Check if edit key is valid after card is loaded
+  const editKey = searchParams.get('editable')
   const isEditable = editKey && card.editKey === editKey
 
   return (
-    <div className="container mx-auto max-w-4xl py-8 px-4">
-      <div className="mb-8">
-        <h1 className="text-3xl font-headline font-bold mb-2">Card: {id}</h1>
-        <p className="text-lg text-muted-foreground">{card.task}</p>
-        {isEditable && <p className="text-sm text-muted-foreground mt-2">Editable mode</p>}
+    <div className="container mx-auto max-w-4xl py-8 px-8 flex flex-col gap-8">
+      <div className="text-center flex flex-col gap-1">
+        <h1 className="text-3xl font-headline font-bold mb-2">{id}</h1>
+        <p className="text-md">"{card.task}"</p>
       </div>
 
-      <div className="space-y-4 mb-8">
-        <h2 className="text-xl font-semibold">
-          Entries {entries.length > 0 && `(${entries.length})`}
-        </h2>
+      <div className="space-y-4 mb-8 text-center">
         {entries.length === 0 ? (
-          <p className="text-muted-foreground">No entries yet. Be the first to add one!</p>
+          <p className="text-muted-foreground bg-gray-50 rounded-2xl p-8">No entries yet. Be the first to add one!</p>
         ) : (
           <div className="space-y-4">
             {entries.map((entry) => (
@@ -104,5 +99,5 @@ function Card() {
   )
 }
 
-export default Card
+export default CardView
 

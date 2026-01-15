@@ -3,12 +3,16 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card } from "@/components/ui/card/card"
+import { CardContent } from "@/components/ui/card/card-content"
+import { CardDescription } from "@/components/ui/card/card-description"
+import { CardHeader } from "@/components/ui/card/card-header"
+import { CardTitle } from "@/components/ui/card/card-title"
 import { LoadingBar } from "@/components/ui/spinner"
 import { useCardCreation } from "@/lib/hooks/useCardCreation"
 import { getFieldError } from "@/lib/utils/validation"
 
-function Admin() {
+function AdminView() {
   const {
     formState,
     validation,
@@ -21,11 +25,11 @@ function Admin() {
       <LoadingBar isLoading={formState.isSubmitting} />
       <div className="container mx-auto max-w-2xl py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-headline font-bold mb-2">Admin - Create New Card</h1>
+        <h1 className="text-3xl font-headline font-bold mb-2">Create New Card</h1>
         <p className="text-muted-foreground">Enter a unique card ID and task description to create a new card.</p>
       </div>
 
-      <Card>
+      <Card className="bg-gray-50">
         <CardHeader>
           <CardTitle>Create New Card</CardTitle>
           <CardDescription>
@@ -37,7 +41,7 @@ function Admin() {
             <FieldGroup>
               <Field>
                 <FieldLabel>
-                  <Label htmlFor="customId">Card ID *</Label>
+                  <Label htmlFor="customId">Card name</Label>
                 </FieldLabel>
                 <FieldContent>
                   <Input
@@ -56,7 +60,7 @@ function Admin() {
 
               <Field>
                 <FieldLabel>
-                  <Label htmlFor="task">Task *</Label>
+                  <Label htmlFor="task">Task</Label>
                 </FieldLabel>
                 <FieldContent>
                   <Textarea
@@ -99,5 +103,5 @@ function Admin() {
   )
 }
 
-export default Admin
+export default AdminView
 
