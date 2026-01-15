@@ -16,9 +16,10 @@ export default defineSchema({
         lng: v.number(),
       })
     ),
-    location: v.string(),
+    location: v.optional(v.string()),
+    city: v.optional(v.string()), // City name derived from GPS
     date: v.number(), // timestamp
-    comment: v.string(),
+    comment: v.optional(v.string()),
     photo: v.optional(v.string()), // URL
     cardId: v.id("cards"),
   })
@@ -26,12 +27,16 @@ export default defineSchema({
     .index("by_username", ["username"])
     .index("by_date", ["date"]),
 
-  djPicks: defineTable({
-    artistName: v.string(),
-  }),
+  artistSuggestions: defineTable({
+    name: v.string(),
+    cardEntryId: v.id("cardEntries"),
+  })
+    .index("by_cardEntryId", ["cardEntryId"]),
 
   taskSuggestions: defineTable({
     description: v.string(),
-  }),
+    cardEntryId: v.id("cardEntries"),
+  })
+    .index("by_cardEntryId", ["cardEntryId"]),
 });
 
