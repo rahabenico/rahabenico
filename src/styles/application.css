@@ -75,7 +75,7 @@
 }
 
 @theme inline {
-    --font-sans: 'Objekt Sans', sans-serif;
+    --font-sans: 'DM Sans', sans-serif;
     --font-headline: 'Vampiro One', cursive;
     --font-family-headline: var(--font-headline);
     --color-sidebar-ring: var(--sidebar-ring);
