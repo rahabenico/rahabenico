@@ -12,6 +12,35 @@ export const getCardByCustomId = query({
   },
 });
 
+export const getAllCards = query({
+  handler: async (ctx) => {
+    const cards = await ctx.db.query("cards").collect();
+    return cards;
+  },
+});
+
+export const getAllArtistSuggestions = query({
+  handler: async (ctx) => {
+    const allSuggestions = await ctx.db.query("artistSuggestions").collect();
+
+    // Group by name and sum counts (handle undefined count for migration)
+    const artistMap = new Map<string, number>();
+
+    for (const suggestion of allSuggestions) {
+      const currentCount = artistMap.get(suggestion.name) || 0;
+      const suggestionCount = suggestion.count ?? 1; // Default to 1 for existing records without count
+      artistMap.set(suggestion.name, currentCount + suggestionCount);
+    }
+
+    // Convert to array and sort by count descending
+    const sortedArtists = Array.from(artistMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+
+    return sortedArtists;
+  },
+});
+
 export const getCardEntriesByCardId = query({
   args: { cardId: v.id("cards") },
   handler: async (ctx, args) => {
@@ -20,10 +49,10 @@ export const getCardEntriesByCardId = query({
       .withIndex("by_cardId", (q) => q.eq("cardId", args.cardId))
       .order("desc") // Most recent first
       .collect();
-    
+
     // Sort by date descending (most recent first)
     const sortedEntries = entries.sort((a, b) => b.date - a.date);
-    
+
     // Fetch suggestions for each entry
     const entriesWithSuggestions = await Promise.all(
       sortedEntries.map(async (entry) => {
@@ -31,12 +60,12 @@ export const getCardEntriesByCardId = query({
           .query("artistSuggestions")
           .withIndex("by_cardEntryId", (q) => q.eq("cardEntryId", entry._id))
           .collect();
-        
+
         const taskSuggestions = await ctx.db
           .query("taskSuggestions")
           .withIndex("by_cardEntryId", (q) => q.eq("cardEntryId", entry._id))
           .collect();
-        
+
         return {
           ...entry,
           artistSuggestions: artistSuggestions.map(s => s.name),
@@ -44,7 +73,7 @@ export const getCardEntriesByCardId = query({
         };
       })
     );
-    
+
     return entriesWithSuggestions;
   },
 });
@@ -61,17 +90,21 @@ export const createCard = mutation({
       .query("cards")
       .withIndex("by_customId", (q) => q.eq("customId", args.customId))
       .first();
-    
+
     if (existing) {
       throw new Error(`Card with customId "${args.customId}" already exists`);
     }
 
+    // Generate a random edit key (18 digits for security)
+    const editKey = Math.random().toString().slice(2, 20);
+
     const cardId = await ctx.db.insert("cards", {
       customId: args.customId,
       task: args.task,
+      editKey: editKey,
     });
-    
-    return cardId;
+
+    return { cardId, editKey };
   },
 });
 
@@ -108,10 +141,28 @@ export const createCardEntry = mutation({
     if (args.artistSuggestions && args.artistSuggestions.length > 0) {
       for (const name of args.artistSuggestions) {
         if (name.trim()) {
-          await ctx.db.insert("artistSuggestions", {
-            name: name.trim(),
-            cardEntryId,
-          });
+          const trimmedName = name.trim();
+
+          // Check if this artist suggestion already exists
+          const existingSuggestion = await ctx.db
+            .query("artistSuggestions")
+            .withIndex("by_name", (q) => q.eq("name", trimmedName))
+            .first();
+
+          if (existingSuggestion) {
+            // Increment the counter for existing artist (handle undefined count for migration)
+            const currentCount = existingSuggestion.count ?? 1;
+            await ctx.db.patch(existingSuggestion._id, {
+              count: currentCount + 1,
+            });
+          } else {
+            // Create new artist suggestion with count 1
+            await ctx.db.insert("artistSuggestions", {
+              name: trimmedName,
+              count: 1,
+              cardEntryId,
+            });
+          }
         }
       }
     }

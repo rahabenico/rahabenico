@@ -5,6 +5,7 @@ export default defineSchema({
   cards: defineTable({
     customId: v.string(),
     task: v.string(),
+    editKey: v.string(),
   })
     .index("by_customId", ["customId"]),
 
@@ -29,9 +30,11 @@ export default defineSchema({
 
   artistSuggestions: defineTable({
     name: v.string(),
+    count: v.optional(v.number()),
     cardEntryId: v.id("cardEntries"),
   })
-    .index("by_cardEntryId", ["cardEntryId"]),
+    .index("by_cardEntryId", ["cardEntryId"])
+    .index("by_name", ["name"]),
 
   taskSuggestions: defineTable({
     description: v.string(),

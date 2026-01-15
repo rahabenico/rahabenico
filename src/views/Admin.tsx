@@ -1,66 +1,25 @@
-import { useState } from "react"
-import { useMutation } from "convex/react"
-import { api } from "../../convex/_generated/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useNavigate } from "react-router-dom"
+import { LoadingBar } from "@/components/ui/spinner"
+import { useCardCreation } from "@/lib/hooks/useCardCreation"
+import { getFieldError } from "@/lib/utils/validation"
 
 function Admin() {
-  const navigate = useNavigate()
-  const createCard = useMutation(api.cardEntries.createCard)
-  
-  const [customId, setCustomId] = useState("")
-  const [task, setTask] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setSuccess(false)
-
-    if (!customId.trim()) {
-      setError("Card ID is required")
-      return
-    }
-
-    if (!task.trim()) {
-      setError("Task is required")
-      return
-    }
-
-    setIsSubmitting(true)
-
-    try {
-      await createCard({
-        customId: customId.trim(),
-        task: task.trim(),
-      })
-      
-      setSuccess(true)
-      const createdId = customId.trim()
-      setCustomId("")
-      setTask("")
-      
-      // Optionally navigate to the new card
-      setTimeout(() => {
-        navigate(`/card/${createdId}`)
-      }, 1000)
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to create card"
-      setError(errorMessage)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const {
+    formState,
+    validation,
+    handleInputChange,
+    handleSubmit
+  } = useCardCreation()
 
   return (
-    <div className="container mx-auto max-w-2xl py-8 px-4">
+    <>
+      <LoadingBar isLoading={formState.isSubmitting} />
+      <div className="container mx-auto max-w-2xl py-8 px-4">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Admin - Create New Card</h1>
         <p className="text-muted-foreground">Enter a unique card ID and task description to create a new card.</p>
@@ -83,16 +42,14 @@ function Admin() {
                 <FieldContent>
                   <Input
                     id="customId"
-                    value={customId}
-                    onChange={(e) => setCustomId(e.target.value)}
+                    name="customId"
+                    value={formState.customId}
+                    onChange={handleInputChange}
                     placeholder="e.g., 123"
-                    aria-invalid={!!error}
+                    aria-invalid={!!getFieldError(validation.errors, 'Card ID')}
                   />
-                  {error && <FieldError>{error}</FieldError>}
-                  {success && (
-                    <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                      Card created successfully! Redirecting...
-                    </p>
+                  {getFieldError(validation.errors, 'Card ID') && (
+                    <FieldError>{getFieldError(validation.errors, 'Card ID')}</FieldError>
                   )}
                 </FieldContent>
               </Field>
@@ -104,25 +61,41 @@ function Admin() {
                 <FieldContent>
                   <Textarea
                     id="task"
-                    value={task}
-                    onChange={(e) => setTask(e.target.value)}
+                    name="task"
+                    value={formState.task}
+                    onChange={handleInputChange}
                     placeholder="Enter the task description for this card"
                     rows={4}
-                    aria-invalid={!!error}
+                    aria-invalid={!!getFieldError(validation.errors, 'Task')}
                   />
                 </FieldContent>
               </Field>
             </FieldGroup>
 
             <div className="flex justify-end gap-2 mt-6">
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Creating..." : "Create Card"}
+              <Button type="submit" disabled={formState.isSubmitting}>
+                {formState.isSubmitting ? "Creating..." : "Create Card"}
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
+
+      {formState.success && formState.generatedUrl && (
+        <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-md border border-green-200 dark:border-green-800">
+          <p className="text-sm font-medium text-green-800 dark:text-green-200 mb-1">
+            Card created successfully!
+          </p>
+          <p className="text-xs text-green-600 dark:text-green-400 mb-2">
+            Share this edit URL with users:
+          </p>
+          <div className="bg-white dark:bg-gray-800 p-3 rounded border text-xs font-mono break-all">
+            {formState.generatedUrl}
+          </div>
+        </div>
+      )}
     </div>
+    </>
   )
 }
 

@@ -1,7 +1,7 @@
-import { format } from "date-fns"
+import { formatDisplayDate } from "@/lib/utils/formatDate"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { LocationIcon, UserIcon, CalendarIcon, FileIcon, LayoutIcon } from "@hugeicons/core-free-icons"
+import { LocationIcon, UserIcon, CalendarIcon, FileIcon } from "@hugeicons/core-free-icons"
 import { Badge } from "@/components/ui/badge"
 
 interface CardEntryProps {
@@ -18,7 +18,7 @@ interface CardEntryProps {
   }
 }
 
-export function CardEntry({ entry }: CardEntryProps) {
+export function EntryCard({ entry }: CardEntryProps) {
   const entryDate = new Date(entry.date)
 
   return (
@@ -32,7 +32,7 @@ export function CardEntry({ entry }: CardEntryProps) {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <HugeiconsIcon icon={CalendarIcon} className="h-4 w-4" />
             <time dateTime={entryDate.toISOString()}>
-              {format(entryDate, "PPP 'at' p")}
+              {formatDisplayDate(entryDate)}
             </time>
           </div>
         </div>
@@ -79,7 +79,7 @@ export function CardEntry({ entry }: CardEntryProps) {
           </div>
         )}
 
-        {entry.taskSuggestions && entry.taskSuggestions.length > 0 && (
+        {/* {entry.taskSuggestions && entry.taskSuggestions.length > 0 && (
           <div className="pt-2 border-t">
             <div className="flex items-start gap-2">
               <HugeiconsIcon icon={LayoutIcon} className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
@@ -95,7 +95,7 @@ export function CardEntry({ entry }: CardEntryProps) {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   )
