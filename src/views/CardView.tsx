@@ -24,14 +24,24 @@ function CardView() {
   useEffect(() => {
     if (!id || isLoading || !card) return;
 
+    const editKey = searchParams.get("key");
+    const newSearchParams = new URLSearchParams(searchParams);
+
     // Check if we already have a saved edit key
     const savedEditKey = getLocalStorageItem<string | null>(`key-${id}`, null);
+    const closed = getLocalStorageItem<boolean | null>(`closed-${id}`, false);
+
+    if (closed) {
+      updateEditState(false);
+      newSearchParams.delete("key");
+      navigate({ search: newSearchParams.toString() }, { replace: true });
+
+      return;
+    }
 
     if (savedEditKey && card.editKey === savedEditKey) {
       updateEditState(true);
     }
-
-    const editKey = searchParams.get("editable");
 
     if (editKey && card.editKey === editKey) {
       // Save the valid edit key to localStorage
@@ -39,8 +49,7 @@ function CardView() {
       updateEditState(true);
 
       // Remove the query parameter from the URL
-      const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.delete("editable");
+      newSearchParams.delete("key");
 
       navigate({ search: newSearchParams.toString() }, { replace: true });
     }
@@ -49,6 +58,7 @@ function CardView() {
   const handleSuccess = () => {
     setIsOpen(false);
     removeLocalStorageItem(`key-${id}`);
+    setLocalStorageItem(`closed-${id}`, true);
     setIsEditable(false);
   };
 

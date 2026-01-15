@@ -79,10 +79,9 @@ function AdminView() {
         </Card>
 
         {formState.success && formState.generatedUrl && (
-          <div className="mt-6 rounded-md border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
-            <p className="mb-1 font-medium text-green-800 text-sm dark:text-green-200">Card created successfully!</p>
-            <p className="mb-2 text-green-600 text-xs dark:text-green-400">Share this edit URL with users:</p>
-            <div className="break-all rounded border bg-white p-3 font-mono text-xs dark:bg-gray-800">
+          <div className="mt-6 rounded-xl border border-green-700/20 bg-green-50 px-6 pt-5 pb-6 dark:border-green-800 dark:bg-green-900/20">
+            <p className="mb-3 font-semibold text-base">Card created successfully!</p>
+            <div className="break-all rounded-lg border border-green-700/20 bg-white p-4 font-mono text-gray-900 text-xs dark:border-green-700 dark:bg-gray-800 dark:text-gray-100">
               {formState.generatedUrl}
             </div>
           </div>

@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import { useMutation } from 'convex/react'
-import { api } from '../../../convex/_generated/api'
-import { validateCardForm, type ValidationResult } from '../utils/validation'
+import { useMutation } from "convex/react";
+import { useState } from "react";
+import { api } from "../../../convex/_generated/api";
+import { type ValidationResult, validateCardForm } from "../utils/validation";
 
 export interface CardCreationState {
-  customId: string
-  task: string
-  isSubmitting: boolean
-  error: string | null
-  success: boolean
-  generatedUrl: string | null
+  customId: string;
+  task: string;
+  isSubmitting: boolean;
+  error: string | null;
+  success: boolean;
+  generatedUrl: string | null;
 }
 
 /**
@@ -55,97 +55,96 @@ export interface CardCreationState {
  * ```
  */
 export function useCardCreation() {
-  const createCard = useMutation(api.cardEntries.createCard)
+  const createCard = useMutation(api.cardEntries.createCard);
 
   const [formState, setFormState] = useState<CardCreationState>({
-    customId: '',
-    task: '',
+    customId: "",
+    task: "",
     isSubmitting: false,
     error: null,
     success: false,
     generatedUrl: null,
-  })
+  });
 
   const [validation, setValidation] = useState<ValidationResult>({
     isValid: true,
-    errors: []
-  })
+    errors: [],
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
 
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       [name]: value,
       error: null,
       success: false,
-    }))
+    }));
 
     // Clear validation errors for this field
-    setValidation(prev => ({
+    setValidation((prev) => ({
       ...prev,
-      errors: prev.errors.filter(error => error.field !== name)
-    }))
-  }
+      errors: prev.errors.filter((error) => error.field !== name),
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const validationResult = validateCardForm(formState.customId, formState.task)
-    setValidation(validationResult)
+    const validationResult = validateCardForm(formState.customId, formState.task);
+    setValidation(validationResult);
 
     if (!validationResult.isValid) {
-      return
+      return;
     }
 
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       isSubmitting: true,
       error: null,
-      success: false
-    }))
+      success: false,
+    }));
 
     try {
       const result = await createCard({
         customId: formState.customId.trim(),
         task: formState.task.trim(),
-      })
+      });
 
-      const editUrl = `https://www.rahabenico.de/card/${formState.customId.trim()}?editable=${result.editKey}`
+      const editUrl = `https://www.rahabenico.de/card/${formState.customId.trim()}?key=${result.editKey}`;
 
-      setFormState(prev => ({
+      setFormState((prev) => ({
         ...prev,
         success: true,
         isSubmitting: false,
-        customId: '',
-        task: '',
+        customId: "",
+        task: "",
         generatedUrl: editUrl,
-      }))
-
+      }));
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to create card'
-      setFormState(prev => ({
+      const errorMessage = error instanceof Error ? error.message : "Failed to create card";
+      setFormState((prev) => ({
         ...prev,
         error: errorMessage,
         isSubmitting: false,
-      }))
+      }));
     }
-  }
+  };
 
   const resetForm = () => {
     setFormState({
-      customId: '',
-      task: '',
+      customId: "",
+      task: "",
       isSubmitting: false,
       error: null,
       success: false,
       generatedUrl: null,
-    })
+    });
     setValidation({
       isValid: true,
-      errors: []
-    })
-  }
+      errors: [],
+    });
+  };
 
   return {
     formState,
@@ -153,5 +152,5 @@ export function useCardCreation() {
     handleInputChange,
     handleSubmit,
     resetForm,
-  }
+  };
 }
