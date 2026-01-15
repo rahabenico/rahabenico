@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { ConvexProvider } from 'convex/react'
-import { convex } from './lib/convex'
-import Home from './views/Home'
-import CardView from './views/CardView'
-import AdminView from './views/AdminView'
+import { ConvexProvider } from "convex/react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { convex } from "./lib/convex";
+import AdminView from "./views/AdminView";
+import CardView from "./views/CardView";
+import Home from "./views/Home";
 
 export function App() {
   return (
@@ -16,7 +16,7 @@ export function App() {
         </Routes>
       </BrowserRouter>
     </ConvexProvider>
-  )
+  );
 }
 
 export default App;

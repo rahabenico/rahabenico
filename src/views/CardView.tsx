@@ -1,24 +1,55 @@
-import { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useEffectEvent, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { EntryCard } from "@/components/EntryCard";
 import { EntryForm } from "@/components/EntryForm";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LoadingBar } from "@/components/ui/spinner";
 import { useCardData } from "@/lib/hooks/useCardData";
-import { useLocalStorageFlag } from "@/lib/hooks/useLocalStorage";
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "@/lib/utils/localStorage";
 
 function CardView() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [hasEnteredEntry, setHasEnteredEntry] = useLocalStorageFlag(`entry-entered-${id}`);
+  const [isEditable, setIsEditable] = useState(false);
 
   const { card, entries, isLoading } = useCardData(id);
 
+  const updateEditState = useEffectEvent((isEditable: boolean) => {
+    setIsEditable(isEditable);
+  });
+
+  useEffect(() => {
+    if (!id || isLoading || !card) return;
+
+    // Check if we already have a saved edit key
+    const savedEditKey = getLocalStorageItem<string | null>(`key-${id}`, null);
+
+    if (savedEditKey && card.editKey === savedEditKey) {
+      updateEditState(true);
+    }
+
+    const editKey = searchParams.get("editable");
+
+    if (editKey && card.editKey === editKey) {
+      // Save the valid edit key to localStorage
+      setLocalStorageItem(`key-${id}`, editKey);
+      updateEditState(true);
+
+      // Remove the query parameter from the URL
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete("editable");
+
+      navigate({ search: newSearchParams.toString() }, { replace: true });
+    }
+  }, [id, isLoading, card, searchParams, navigate]);
+
   const handleSuccess = () => {
     setIsOpen(false);
-    setHasEnteredEntry(true);
+    removeLocalStorageItem(`key-${id}`);
+    setIsEditable(false);
   };
 
   if (!id) {
@@ -37,9 +68,6 @@ function CardView() {
   if (!card) {
     return <div>Card not found</div>;
   }
-
-  const editKey = searchParams.get("editable");
-  const isEditable = editKey && card.editKey === editKey;
 
   return (
     <div className="container mx-auto flex max-w-4xl flex-col gap-6 p-6 md:gap-8 md:p-12">
@@ -60,7 +88,7 @@ function CardView() {
         )}
       </div>
 
-      {!hasEnteredEntry && isEditable && (
+      {isEditable && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
