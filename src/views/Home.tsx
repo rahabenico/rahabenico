@@ -14,12 +14,12 @@ function Home() {
       <LoadingBar isLoading={isLoading} />
       <div className="container mx-auto max-w-4xl py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Home</h1>
+        <h1 className="text-3xl font-headline font-bold mb-2">Home</h1>
         <p className="text-lg text-muted-foreground">Welcome to Rahabenico</p>
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl font-headline font-semibold">
           Available Cards {cards && cards.length > 0 && `(${cards.length})`}
         </h2>
 
@@ -46,7 +46,7 @@ function Home() {
           </div>
         )}
 
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl font-headline font-semibold">
           Artist Suggestions {artistSuggestions && artistSuggestions.length > 0 && `(${artistSuggestions.length})`}
         </h2>
 

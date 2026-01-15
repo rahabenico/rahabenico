@@ -52,7 +52,7 @@ function Card() {
   return (
     <div className="container mx-auto max-w-4xl py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Card: {id}</h1>
+        <h1 className="text-3xl font-headline font-bold mb-2">Card: {id}</h1>
         <p className="text-lg text-muted-foreground">{card.task}</p>
         {isEditable && <p className="text-sm text-muted-foreground mt-2">Editable mode</p>}
       </div>

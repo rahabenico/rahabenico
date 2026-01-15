@@ -21,7 +21,7 @@ function Admin() {
       <LoadingBar isLoading={formState.isSubmitting} />
       <div className="container mx-auto max-w-2xl py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Admin - Create New Card</h1>
+        <h1 className="text-3xl font-headline font-bold mb-2">Admin - Create New Card</h1>
         <p className="text-muted-foreground">Enter a unique card ID and task description to create a new card.</p>
       </div>
 
