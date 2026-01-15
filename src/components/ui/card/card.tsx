@@ -6,7 +6,7 @@ function Card({ className, size = "default", ...props }: React.ComponentProps<"d
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card flex flex-col gap-3 overflow-hidden rounded-xl bg-card p-6 text-card-foreground text-sm",
+        "group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card p-6 text-card-foreground text-sm",
         className
       )}
       {...props}

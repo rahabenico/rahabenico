@@ -64,7 +64,7 @@ function CardView() {
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button size="lg" aria-label="Open form">
+              <Button size="lg" className="rounded-full px-8 py-6 text-md" aria-label="Open form">
                 Add entry
               </Button>
             </SheetTrigger>

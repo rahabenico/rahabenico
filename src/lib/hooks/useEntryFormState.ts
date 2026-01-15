@@ -254,9 +254,6 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
           : undefined,
       })
 
-      // Save to localStorage
-      setLocalStorageItem("entry-entered", "true")
-
       // Reset form
       resetForm()
 

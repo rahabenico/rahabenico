@@ -18,10 +18,10 @@ function AdminView() {
   return (
     <>
       <LoadingBar isLoading={formState.isSubmitting} />
-      <div className="container mx-auto max-w-2xl px-4 py-8">
-        <div className="mb-8">
+      <div className="container mx-auto flex max-w-4xl flex-col gap-6 p-6 md:gap-8 md:p-12">
+        <div className="flex flex-col gap-1 text-center">
           <h1 className="mb-2 font-bold font-headline text-3xl">Create New Card</h1>
-          <p className="text-muted-foreground">Enter a unique card ID and task description to create a new card.</p>
+          <p className="text-md">Enter a unique card ID and task description to create a new card.</p>
         </div>
 
         <Card className="border border-gray-200">

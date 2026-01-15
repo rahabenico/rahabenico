@@ -40,7 +40,7 @@ export function EntryCard({ entry }: CardEntryProps) {
             </IconItem>
           )}
 
-          {entry.gpsPosition && (
+          {(entry.gpsPosition || entry.location) && (
             <IconItem icon={LocationIcon} className="text-sm">
               <div>
                 {entry.city && <span>{entry.city}</span>}
