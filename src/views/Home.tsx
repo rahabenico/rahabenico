@@ -17,7 +17,7 @@ function Home() {
     <>
       <LoadingBar isLoading={isLoading} />
       <div className="container mx-auto max-w-4xl space-y-12 px-4 py-8 md:py-12">
-        <div className="space-y-4">
+        <div className="flex flex-col items-center justify-center space-y-4">
           <div className="flex items-center gap-6">
             <div>
               <Heading level={1} variant="main">
@@ -29,14 +29,11 @@ function Home() {
                 <span className="text-[#7E20D1]">Co</span>nnect.
               </Heading>
             </div>
-            <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
           </div>
-          <p>
-            This is a platform for connecting with others at raves. It's a place to share your experiences, find new
-            friends, and explore new music.
-          </p>
+          <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
+          <p>Under construction</p>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 text-center">
           <Heading level={2} variant="section">
             {cards ? cards.length : 0} cards in circulation
           </Heading>
@@ -74,7 +71,7 @@ function Home() {
             </>
           )}
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 text-center">
           <Heading level={2} variant="section">
             Top Artist Suggestions
             {/* {artistSuggestions && artistSuggestions.length > 0 && `(${artistSuggestions.length})`} */}
