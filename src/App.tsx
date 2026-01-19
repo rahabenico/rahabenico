@@ -1,6 +1,7 @@
 import { ConvexProvider } from "convex/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { convex } from "./lib/convex";
+import { Footer } from "./components/Footer";
 import AdminView from "./views/AdminView";
 import CardView from "./views/CardView";
 import Home from "./views/Home";
@@ -14,6 +15,7 @@ export function App() {
           <Route path="/admin" element={<AdminView />} />
           <Route path="/card/:id" element={<CardView />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </ConvexProvider>
   );
