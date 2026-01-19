@@ -5,6 +5,11 @@ import type { Id } from "../../../convex/_generated/dataModel";
 import type { GPSPosition } from "../utils/geolocation";
 import { type ValidationResult, validateEntryForm } from "../utils/validation";
 
+interface SuggestionItem {
+  id: string;
+  value: string;
+}
+
 export interface EntryFormData {
   username: string;
   date: Date | undefined;
@@ -15,8 +20,8 @@ export interface EntryFormData {
   showInstagram: boolean;
   gpsPosition: GPSPosition | null;
   city: string;
-  artistSuggestions: string[];
-  taskSuggestions: string[];
+  artistSuggestions: SuggestionItem[];
+  taskSuggestions: SuggestionItem[];
   showArtistSuggestions: boolean;
   showTaskSuggestions: boolean;
 }
@@ -79,8 +84,8 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     showInstagram: false,
     gpsPosition: null,
     city: "",
-    artistSuggestions: [""],
-    taskSuggestions: [""],
+    artistSuggestions: [{ id: "artist-0", value: "" }],
+    taskSuggestions: [{ id: "task-0", value: "" }],
     showArtistSuggestions: false,
     showTaskSuggestions: false,
     isSubmitting: false,
@@ -139,7 +144,9 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     setFormState((prev) => ({
       ...prev,
       showArtistSuggestions: !prev.showArtistSuggestions,
-      artistSuggestions: !prev.showArtistSuggestions ? [""] : [""],
+      artistSuggestions: !prev.showArtistSuggestions
+        ? [{ id: "artist-0", value: "" }]
+        : [{ id: "artist-0", value: "" }],
     }));
   };
 
@@ -147,14 +154,14 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     setFormState((prev) => ({
       ...prev,
       showTaskSuggestions: !prev.showTaskSuggestions,
-      taskSuggestions: !prev.showTaskSuggestions ? [""] : [""],
+      taskSuggestions: !prev.showTaskSuggestions ? [{ id: "task-0", value: "" }] : [{ id: "task-0", value: "" }],
     }));
   };
 
   const addArtistSuggestion = () => {
     setFormState((prev) => ({
       ...prev,
-      artistSuggestions: [...prev.artistSuggestions, ""],
+      artistSuggestions: [...prev.artistSuggestions, { id: `artist-${Date.now()}`, value: "" }],
     }));
   };
 
@@ -168,14 +175,16 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
   const updateArtistSuggestion = (index: number, value: string) => {
     setFormState((prev) => ({
       ...prev,
-      artistSuggestions: prev.artistSuggestions.map((suggestion, i) => (i === index ? value : suggestion)),
+      artistSuggestions: prev.artistSuggestions.map((suggestion, i) =>
+        i === index ? { ...suggestion, value } : suggestion
+      ),
     }));
   };
 
   const addTaskSuggestion = () => {
     setFormState((prev) => ({
       ...prev,
-      taskSuggestions: [...prev.taskSuggestions, ""],
+      taskSuggestions: [...prev.taskSuggestions, { id: `task-${Date.now()}`, value: "" }],
     }));
   };
 
@@ -189,7 +198,9 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
   const updateTaskSuggestion = (index: number, value: string) => {
     setFormState((prev) => ({
       ...prev,
-      taskSuggestions: prev.taskSuggestions.map((suggestion, i) => (i === index ? value : suggestion)),
+      taskSuggestions: prev.taskSuggestions.map((suggestion, i) =>
+        i === index ? { ...suggestion, value } : suggestion
+      ),
     }));
   };
 
@@ -212,8 +223,8 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
       showInstagram: false,
       gpsPosition: null,
       city: "",
-      artistSuggestions: [""],
-      taskSuggestions: [""],
+      artistSuggestions: [{ id: "artist-0", value: "" }],
+      taskSuggestions: [{ id: "task-0", value: "" }],
       showArtistSuggestions: false,
       showTaskSuggestions: false,
       isSubmitting: false,
@@ -250,13 +261,13 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
         comment: formState.comment.trim() || undefined,
         instagram: formState.instagram.trim() || undefined,
         artistSuggestions: formState.showArtistSuggestions
-          ? formState.artistSuggestions.filter((s) => s.trim()).length > 0
-            ? formState.artistSuggestions.filter((s) => s.trim())
+          ? formState.artistSuggestions.filter((s) => s.value.trim()).length > 0
+            ? formState.artistSuggestions.filter((s) => s.value.trim()).map((s) => s.value)
             : undefined
           : undefined,
         taskSuggestions: formState.showTaskSuggestions
-          ? formState.taskSuggestions.filter((s) => s.trim()).length > 0
-            ? formState.taskSuggestions.filter((s) => s.trim())
+          ? formState.taskSuggestions.filter((s) => s.value.trim()).length > 0
+            ? formState.taskSuggestions.filter((s) => s.value.trim()).map((s) => s.value)
             : undefined
           : undefined,
       });

@@ -6,9 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
+interface SuggestionItem {
+  id: string;
+  value: string;
+}
+
 interface SuggestionsFieldProps {
   title: string;
-  suggestions: string[];
+  suggestions: SuggestionItem[];
   onAdd: () => void;
   onRemove: (index: number) => void;
   onUpdate: (index: number, value: string) => void;
@@ -68,10 +73,10 @@ export function SuggestionsField({
       <FieldContent>
         <div className="space-y-2">
           {suggestions.map((suggestion, index) => (
-            <div key={`${index}-${suggestion}`} className="flex gap-2">
+            <div key={suggestion.id} className="flex gap-2">
               {isTextarea ? (
                 <Textarea
-                  value={suggestion}
+                  value={suggestion.value}
                   onChange={(e) => onUpdate(index, e.target.value)}
                   placeholder={`${title} ${index + 1}`}
                   className="min-h-16 flex-1"
@@ -79,7 +84,7 @@ export function SuggestionsField({
                 />
               ) : (
                 <Input
-                  value={suggestion}
+                  value={suggestion.value}
                   onChange={(e) => onUpdate(index, e.target.value)}
                   placeholder={`${title} ${index + 1}`}
                   className="flex-1"
