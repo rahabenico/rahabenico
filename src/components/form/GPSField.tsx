@@ -1,16 +1,16 @@
-import { Button } from "@/components/ui/button"
-import { Field, FieldContent, FieldLabel } from "@/components/ui/field"
-import { Label } from "@/components/ui/label"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { LocationIcon } from "@hugeicons/core-free-icons"
-import { formatGPSCoordinates } from "@/lib/utils/geolocation"
+import { LocationIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@/components/ui/button";
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import { Label } from "@/components/ui/label";
+import { formatGPSCoordinates } from "@/lib/utils/geolocation";
 
 interface GPSFieldProps {
-  position: { lat: number; lng: number } | null
-  city: string
-  onGetGPS: () => void
-  isLoading: boolean
-  disabled?: boolean
+  position: { lat: number; lng: number } | null;
+  city: string;
+  onGetGPS: () => void;
+  isLoading: boolean;
+  disabled?: boolean;
 }
 
 /**
@@ -40,17 +40,12 @@ export function GPSField({ position, city, onGetGPS, isLoading, disabled }: GPSF
       </FieldLabel>
       <FieldContent>
         <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onGetGPS}
-            disabled={disabled || !!position || isLoading}
-          >
-            <HugeiconsIcon icon={LocationIcon} className="h-4 w-4 mr-2" />
-            {isLoading ? 'Getting location...' : position ? 'Location set' : 'Add my GPS position'}
+          <Button type="button" variant="outline" onClick={onGetGPS} disabled={disabled || !!position || isLoading}>
+            <HugeiconsIcon icon={LocationIcon} className="mr-2 h-4 w-4" />
+            {isLoading ? "Getting location..." : position ? "Location set" : "Add my GPS position"}
           </Button>
           {position && (
-            <div className="text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-sm">
               {formatGPSCoordinates(position)}
               {city && <span className="ml-2">• {city}</span>}
             </div>
@@ -58,5 +53,5 @@ export function GPSField({ position, city, onGetGPS, isLoading, disabled }: GPSF
         </div>
       </FieldContent>
     </Field>
-  )
+  );
 }

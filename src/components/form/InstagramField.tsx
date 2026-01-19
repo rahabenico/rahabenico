@@ -1,12 +1,12 @@
-import { Input } from "@/components/ui/input"
-import { Field, FieldContent, FieldLabel } from "@/components/ui/field"
-import { Label } from "@/components/ui/label"
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface InstagramFieldProps {
-  value: string
-  onChange: (value: string) => void
-  isVisible: boolean
-  onToggle: () => void
+  value: string;
+  onChange: (value: string) => void;
+  isVisible: boolean;
+  onToggle: () => void;
 }
 
 /**
@@ -30,14 +30,10 @@ interface InstagramFieldProps {
 export function InstagramField({ value, onChange, isVisible, onToggle }: InstagramFieldProps) {
   if (!isVisible) {
     return (
-      <button
-        type="button"
-        onClick={onToggle}
-        className="text-sm text-primary hover:underline"
-      >
+      <button type="button" onClick={onToggle} className="text-primary text-sm hover:underline">
         Add Instagram handle
       </button>
-    )
+    );
   }
 
   return (
@@ -54,5 +50,5 @@ export function InstagramField({ value, onChange, isVisible, onToggle }: Instagr
         />
       </FieldContent>
     </Field>
-  )
+  );
 }

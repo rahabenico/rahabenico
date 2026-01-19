@@ -1,12 +1,12 @@
-import { Textarea } from "@/components/ui/textarea"
-import { Field, FieldContent, FieldLabel } from "@/components/ui/field"
-import { Label } from "@/components/ui/label"
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface CommentFieldProps {
-  value: string
-  onChange: (value: string) => void
-  isVisible: boolean
-  onToggle: () => void
+  value: string;
+  onChange: (value: string) => void;
+  isVisible: boolean;
+  onToggle: () => void;
 }
 
 /**
@@ -30,14 +30,10 @@ interface CommentFieldProps {
 export function CommentField({ value, onChange, isVisible, onToggle }: CommentFieldProps) {
   if (!isVisible) {
     return (
-      <button
-        type="button"
-        onClick={onToggle}
-        className="text-sm text-primary hover:underline"
-      >
+      <button type="button" onClick={onToggle} className="text-primary text-sm hover:underline">
         Add comment
       </button>
-    )
+    );
   }
 
   return (
@@ -55,5 +51,5 @@ export function CommentField({ value, onChange, isVisible, onToggle }: CommentFi
         />
       </FieldContent>
     </Field>
-  )
+  );
 }

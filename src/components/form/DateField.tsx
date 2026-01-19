@@ -1,17 +1,17 @@
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Field, FieldContent, FieldLabel } from "@/components/ui/field"
-import { Label } from "@/components/ui/label"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { CalendarIcon } from "@hugeicons/core-free-icons"
-import { formatCalendarDate } from "@/lib/utils/formatDate"
+import { CalendarIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { formatCalendarDate } from "@/lib/utils/formatDate";
 
 interface DateFieldProps {
-  date: Date | undefined
-  onChange: (date: Date | undefined) => void
-  error?: string
-  required?: boolean
+  date: Date | undefined;
+  onChange: (date: Date | undefined) => void;
+  error?: string;
+  required?: boolean;
 }
 
 /**
@@ -36,7 +36,7 @@ export function DateField({ date, onChange, error, required }: DateFieldProps) {
   return (
     <Field>
       <FieldLabel>
-        <Label>Date {required && '*'}</Label>
+        <Label>Date {required && "*"}</Label>
       </FieldLabel>
       <FieldContent>
         <Popover>
@@ -52,16 +52,11 @@ export function DateField({ date, onChange, error, required }: DateFieldProps) {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={onChange}
-              initialFocus
-            />
+            <Calendar mode="single" selected={date} onSelect={onChange} initialFocus />
           </PopoverContent>
         </Popover>
-        {error && <div className="text-sm text-destructive mt-1">{error}</div>}
+        {error && <div className="mt-1 text-destructive text-sm">{error}</div>}
       </FieldContent>
     </Field>
-  )
+  );
 }
