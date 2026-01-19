@@ -1,3 +1,7 @@
+import { DownloadIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useState } from "react";
+import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card/card";
 import { CardContent } from "@/components/ui/card/card-content";
@@ -14,6 +18,55 @@ import { getFieldError } from "@/lib/utils/validation";
 
 function AdminView() {
   const { formState, validation, handleInputChange, handleSubmit } = useCardCreation();
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopyUrl = async () => {
+    if (formState.generatedUrl) {
+      try {
+        await navigator.clipboard.writeText(formState.generatedUrl);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+      } catch (err) {
+        console.error("Failed to copy URL:", err);
+      }
+    }
+  };
+
+  const handleDownloadQR = () => {
+    if (formState.generatedUrl) {
+      // Create a temporary canvas to convert SVG to PNG
+      const svg = document.querySelector(".qr-code-svg") as SVGElement;
+      if (svg) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+
+        // Convert SVG to data URL
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+        const svgUrl = URL.createObjectURL(svgBlob);
+
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
+
+          // Create download link
+          const link = document.createElement("a");
+          link.download = `qr-code-${formState.customId || "card"}.png`;
+          link.href = canvas.toDataURL("image/png");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          // Clean up
+          URL.revokeObjectURL(svgUrl);
+        };
+
+        img.src = svgUrl;
+      }
+    }
+  };
 
   return (
     <>
@@ -81,8 +134,35 @@ function AdminView() {
         {formState.success && formState.generatedUrl && (
           <div className="mt-6 rounded-xl border border-green-700/20 bg-green-50 px-6 pt-5 pb-6 dark:border-green-800 dark:bg-green-900/20">
             <p className="mb-3 font-semibold text-base">Card created successfully!</p>
-            <div className="break-all rounded-lg border border-green-700/20 bg-white p-4 font-mono text-gray-900 text-xs dark:border-green-700 dark:bg-gray-800 dark:text-gray-100">
-              {formState.generatedUrl}
+            <div className="mb-4 flex items-center gap-2">
+              <div className="flex-1 break-all rounded-lg border border-green-700/20 bg-white p-4 font-mono text-gray-900 text-xs dark:border-green-700 dark:bg-gray-800 dark:text-gray-100">
+                {formState.generatedUrl}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCopyUrl}
+                className="shrink-0"
+                title="Copy URL to clipboard"
+              >
+                <HugeiconsIcon icon={DownloadIcon} className="h-4 w-4" />
+                {copySuccess ? "Copied!" : "Copy"}
+              </Button>
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              {/* biome-ignore lint/nursery/useSortedClasses: Complex dark mode classes */}
+              <div className="bg-white border border-green-700/20 p-4 rounded-lg dark:bg-gray-800 dark:border-green-700">
+                <QRCode
+                  value={formState.generatedUrl}
+                  size={200}
+                  className="qr-code-svg"
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                />
+              </div>
+              <Button variant="outline" onClick={handleDownloadQR} className="w-fit" title="Download QR code as PNG">
+                <HugeiconsIcon icon={DownloadIcon} className="mr-2 h-4 w-4" />
+                Download QR Code
+              </Button>
             </div>
           </div>
         )}

@@ -1,65 +1,27 @@
-import { useEffect, useEffectEvent, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { EntryCard } from "@/components/EntryCard";
 import { EntryForm } from "@/components/EntryForm";
-import { Button } from "@/components/ui/button";
+import { FloatingButton } from "@/components/FloatingButton";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LoadingBar } from "@/components/ui/spinner";
 import { useCardData } from "@/lib/hooks/useCardData";
-import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "@/lib/utils/localStorage";
+import { useCardState } from "@/lib/hooks/useCardState";
 
 function CardView() {
   const { id } = useParams<{ id: string }>();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [isEditable, setIsEditable] = useState(false);
 
   const { card, entries, isLoading } = useCardData(id);
-
-  const updateEditState = useEffectEvent((isEditable: boolean) => {
-    setIsEditable(isEditable);
+  const { isEditable, closeCardForm } = useCardState({
+    id,
+    editKey: card?.editKey,
+    isLoading: isLoading || false,
   });
-
-  useEffect(() => {
-    if (!id || isLoading || !card) return;
-
-    const editKey = searchParams.get("key");
-    const newSearchParams = new URLSearchParams(searchParams);
-
-    // Check if we already have a saved edit key
-    const savedEditKey = getLocalStorageItem<string | null>(`key-${id}`, null);
-    const closed = getLocalStorageItem<boolean | null>(`closed-${id}`, false);
-
-    if (closed) {
-      updateEditState(false);
-      newSearchParams.delete("key");
-      navigate({ search: newSearchParams.toString() }, { replace: true });
-
-      return;
-    }
-
-    if (savedEditKey && card.editKey === savedEditKey) {
-      updateEditState(true);
-    }
-
-    if (editKey && card.editKey === editKey) {
-      // Save the valid edit key to localStorage
-      setLocalStorageItem(`key-${id}`, editKey);
-      updateEditState(true);
-
-      // Remove the query parameter from the URL
-      newSearchParams.delete("key");
-
-      navigate({ search: newSearchParams.toString() }, { replace: true });
-    }
-  }, [id, isLoading, card, searchParams, navigate]);
 
   const handleSuccess = () => {
     setIsOpen(false);
-    removeLocalStorageItem(`key-${id}`);
-    setLocalStorageItem(`closed-${id}`, true);
-    setIsEditable(false);
+    closeCardForm();
   };
 
   if (!id) {
@@ -99,24 +61,20 @@ function CardView() {
       </div>
 
       {isEditable && (
-        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button size="lg" className="rounded-full px-8 py-6 text-md" aria-label="Open form">
-                Add entry
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="bottom">
-              <SheetHeader>
-                <SheetTitle>Add Entry</SheetTitle>
-                <SheetDescription>Fill out the form below to add an entry to this card.</SheetDescription>
-              </SheetHeader>
-              <div className="mt-6">
-                <EntryForm cardId={card._id} onSuccess={handleSuccess} />
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <FloatingButton aria-label="Open form">Add entry</FloatingButton>
+          </SheetTrigger>
+          <SheetContent side="bottom">
+            <SheetHeader>
+              <SheetTitle>Add Entry</SheetTitle>
+              <SheetDescription>Fill out the form below to add an entry to this card.</SheetDescription>
+            </SheetHeader>
+            <div className="mt-6">
+              <EntryForm cardId={card._id} onSuccess={handleSuccess} />
+            </div>
+          </SheetContent>
+        </Sheet>
       )}
     </div>
   );
