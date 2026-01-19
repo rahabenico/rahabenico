@@ -1,3 +1,4 @@
+import type * as React from "react";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,6 +37,13 @@ export function CommentField({ value, onChange, isVisible, onToggle }: CommentFi
     );
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    if (newValue.length <= 300) {
+      onChange(newValue);
+    }
+  };
+
   return (
     <Field>
       <FieldLabel>
@@ -45,10 +53,12 @@ export function CommentField({ value, onChange, isVisible, onToggle }: CommentFi
         <Textarea
           id="comment"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           placeholder="Enter your comment"
           rows={4}
+          maxLength={300}
         />
+        <div className="mt-1 text-muted-foreground text-xs">{value.length}/300 characters</div>
       </FieldContent>
     </Field>
   );
