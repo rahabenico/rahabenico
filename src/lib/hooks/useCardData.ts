@@ -1,6 +1,5 @@
-import { useQuery } from 'convex/react'
-import { api } from '../../../convex/_generated/api'
-import type { Id } from '../../../convex/_generated/dataModel'
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 /**
  * Hook for fetching card data and its associated entries
@@ -26,17 +25,11 @@ import type { Id } from '../../../convex/_generated/dataModel'
  * ```
  */
 export function useCardData(customId: string | undefined) {
-  const card = useQuery(
-    api.cardEntries.getCardByCustomId,
-    customId ? { customId } : "skip"
-  )
+  const card = useQuery(api.cardEntries.getCardByCustomId, customId ? { customId } : "skip");
 
-  const entries = useQuery(
-    api.cardEntries.getCardEntriesByCardId,
-    card ? { cardId: card._id } : "skip"
-  )
+  const entries = useQuery(api.cardEntries.getCardEntriesByCardId, card ? { cardId: card._id } : "skip");
 
-  const isLoading = card === undefined || (card && entries === undefined)
+  const isLoading = card === undefined || (card && entries === undefined);
 
   return {
     card,
@@ -44,5 +37,5 @@ export function useCardData(customId: string | undefined) {
     isLoading,
     hasCard: card !== null && card !== undefined,
     hasEntries: entries !== null && entries !== undefined && entries.length > 0,
-  }
+  };
 }

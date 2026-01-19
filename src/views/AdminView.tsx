@@ -53,7 +53,7 @@ function AdminView() {
 
           // Create download link
           const link = document.createElement("a");
-          link.download = `qr-code-${formState.customId || "card"}.png`;
+          link.download = `${formState.customId || "card"}.png`;
           link.href = canvas.toDataURL("image/png");
           document.body.appendChild(link);
           link.click();

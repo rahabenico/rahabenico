@@ -117,8 +117,8 @@ export function useCardCreation() {
         ...prev,
         success: true,
         isSubmitting: false,
-        customId: "",
-        task: "",
+        customId: prev.customId, // Keep the customId for QR code naming
+        task: prev.task, // Keep the task for reference
         generatedUrl: editUrl,
       }));
     } catch (error) {

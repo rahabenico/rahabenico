@@ -14,7 +14,7 @@ export const getCardByCustomId = query({
 
 export const getAllCards = query({
   handler: async (ctx) => {
-    const cards = await ctx.db.query("cards").collect();
+    const cards = await ctx.db.query("cards").order("desc").collect();
     return cards;
   },
 });

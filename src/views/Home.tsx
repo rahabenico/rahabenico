@@ -42,15 +42,17 @@ function Home() {
           ) : (
             <>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {(showAllCards ? cards : cards.slice(-5)).map((card) => (
-                  <Teaser
-                    key={card._id}
-                    href={`/card/${card.customId}`}
-                    title={card.customId}
-                    subtitle={card.task}
-                    className="lg:aspect-10/4"
-                  />
-                ))}
+                {(showAllCards ? cards.slice(-5).concat(cards.slice(0, cards.length - 5)) : cards.slice(-5)).map(
+                  (card) => (
+                    <Teaser
+                      key={card._id}
+                      href={`/card/${card.customId}`}
+                      title={card.customId}
+                      subtitle={card.task}
+                      className="lg:aspect-10/4"
+                    />
+                  )
+                )}
               </div>
               {cards.length > 5 && (
                 <div className="mt-6 flex justify-center">
