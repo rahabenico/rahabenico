@@ -1,10 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import {
-  getLocalStorageItem,
-  setLocalStorageItem,
-  removeLocalStorageItem
-} from '@/lib/utils/localStorage';
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "@/lib/utils/localStorage";
 
 interface UseCardStateOptions {
   id: string | undefined;
@@ -25,7 +21,28 @@ interface CardState {
 export function useCardState({ id, editKey, isLoading = false }: UseCardStateOptions): CardState {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [isEditable, setIsEditable] = useState(false);
+
+  // Initialize isEditable based on localStorage state and URL params
+  const [isEditable, setIsEditable] = useState(() => {
+    if (!id) return false;
+
+    const closed = getLocalStorageItem<boolean>(`closed-${id}`, false);
+    if (closed) return false;
+
+    // Check for saved edit key
+    const savedEditKey = getLocalStorageItem<string | null>(`key-${id}`, null);
+    if (savedEditKey && editKey && savedEditKey === editKey) {
+      return true;
+    }
+
+    // Check URL edit key
+    const urlEditKey = searchParams.get("key");
+    if (urlEditKey && editKey && urlEditKey === editKey) {
+      return true;
+    }
+
+    return false;
+  });
 
   // Close card form editing - removes edit key and marks as closed
   const closeCardForm = useCallback(() => {
@@ -37,49 +54,47 @@ export function useCardState({ id, editKey, isLoading = false }: UseCardStateOpt
 
     // Remove key from URL if present
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.delete('key');
+    newSearchParams.delete("key");
     navigate({ search: newSearchParams.toString() }, { replace: true });
   }, [id, searchParams, navigate]);
 
   // Open card form for editing with a valid key
-  const openCardForm = useCallback((key: string) => {
-    if (!id || !key) return;
+  const openCardForm = useCallback(
+    (key: string) => {
+      if (!id || !key) return;
 
-    setLocalStorageItem(`key-${id}`, key);
-    setIsEditable(true);
+      setLocalStorageItem(`key-${id}`, key);
+      setIsEditable(true);
 
-    // Remove key from URL after saving to localStorage
-    const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.delete('key');
-    navigate({ search: newSearchParams.toString() }, { replace: true });
-  }, [id, searchParams, navigate]);
+      // Remove key from URL after saving to localStorage
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete("key");
+      navigate({ search: newSearchParams.toString() }, { replace: true });
+    },
+    [id, searchParams, navigate]
+  );
 
   useEffect(() => {
     if (!id || isLoading) return;
 
-    const urlEditKey = searchParams.get('key');
+    const urlEditKey = searchParams.get("key");
     const newSearchParams = new URLSearchParams(searchParams);
 
-    // Check if card form was previously closed
+    // Check if card form was previously closed - only handle navigation
     const closed = getLocalStorageItem<boolean>(`closed-${id}`, false);
     if (closed) {
-      setIsEditable(false);
-      newSearchParams.delete('key');
+      newSearchParams.delete("key");
       navigate({ search: newSearchParams.toString() }, { replace: true });
       return;
     }
 
-    // Check for saved edit key
-    const savedEditKey = getLocalStorageItem<string | null>(`key-${id}`, null);
-    if (savedEditKey && editKey && savedEditKey === editKey) {
-      setIsEditable(true);
-    }
-
-    // Handle URL edit key
+    // Handle URL edit key - save to localStorage and navigate (state already set in initial state)
     if (urlEditKey && editKey && urlEditKey === editKey) {
-      openCardForm(urlEditKey);
+      setLocalStorageItem(`key-${id}`, urlEditKey);
+      newSearchParams.delete("key");
+      navigate({ search: newSearchParams.toString() }, { replace: true });
     }
-  }, [id, isLoading, editKey, searchParams, navigate, openCardForm]);
+  }, [id, isLoading, editKey, searchParams, navigate]);
 
   return {
     isEditable,

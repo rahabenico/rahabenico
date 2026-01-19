@@ -1,17 +1,16 @@
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from "react";
 import {
-  getCurrentPosition,
+  type GPSPosition,
   getCityFromCoordinates,
+  getCurrentPosition,
   isGeolocationSupported,
-  formatGPSCoordinates,
-  type GPSPosition
-} from '../utils/geolocation'
+} from "../utils/geolocation";
 
 export interface GPSData {
-  position: GPSPosition | null
-  city: string
-  isLoading: boolean
-  error: string | null
+  position: GPSPosition | null;
+  city: string;
+  isLoading: boolean;
+  error: string | null;
 }
 
 /**
@@ -45,69 +44,69 @@ export interface GPSData {
 export function useGPS() {
   const [data, setData] = useState<GPSData>({
     position: null,
-    city: '',
+    city: "",
     isLoading: false,
     error: null,
-  })
+  });
 
   const getGPS = useCallback(async () => {
     if (!isGeolocationSupported()) {
-      setData(prev => ({
+      setData((prev) => ({
         ...prev,
-        error: 'Geolocation is not supported by your browser'
-      }))
-      return
+        error: "Geolocation is not supported by your browser",
+      }));
+      return;
     }
 
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
       isLoading: true,
-      error: null
-    }))
+      error: null,
+    }));
 
     try {
-      const position = await getCurrentPosition()
+      const position = await getCurrentPosition();
 
-      setData(prev => ({
+      setData((prev) => ({
         ...prev,
         position,
         isLoading: false,
-      }))
+      }));
 
       // Fetch city in background
-      const city = await getCityFromCoordinates(position.lat, position.lng)
+      const city = await getCityFromCoordinates(position.lat, position.lng);
       if (city) {
-        setData(prev => ({
+        setData((prev) => ({
           ...prev,
-          city
-        }))
+          city,
+        }));
       }
     } catch (error) {
-      setData(prev => ({
+      setData((prev) => ({
         ...prev,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Failed to get location'
-      }))
+        error: error instanceof Error ? error.message : "Failed to get location",
+      }));
     }
-  }, [])
+  }, []);
 
   const clearGPS = useCallback(() => {
     setData({
       position: null,
-      city: '',
+      city: "",
       isLoading: false,
       error: null,
-    })
-  }, [])
+    });
+  }, []);
 
-  const setGPSData = useCallback((position: GPSPosition | null, city: string = '') => {
+  const setGPSData = useCallback((position: GPSPosition | null, city: string = "") => {
     setData({
       position,
       city,
       isLoading: false,
       error: null,
-    })
-  }, [])
+    });
+  }, []);
 
   return {
     ...data,
@@ -115,5 +114,5 @@ export function useGPS() {
     clearGPS,
     setGPSData,
     isSupported: isGeolocationSupported(),
-  }
+  };
 }

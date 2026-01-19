@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useState } from "react";
 import {
   getLocalStorageItem,
-  setLocalStorageItem,
+  isLocalStorageAvailable,
   removeLocalStorageItem,
-  isLocalStorageAvailable
-} from '../utils/localStorage'
+  setLocalStorageItem,
+} from "../utils/localStorage";
 
 /**
  * Hook for managing localStorage values with React state synchronization
@@ -30,35 +30,38 @@ import {
  */
 export function useLocalStorage<T>(key: string, defaultValue: T): [T, (value: T) => void] {
   const [value, setValue] = useState<T>(() => {
-    return getLocalStorageItem(key, defaultValue)
-  })
+    return getLocalStorageItem(key, defaultValue);
+  });
 
-  const setStoredValue = useCallback((newValue: T) => {
-    setValue(newValue)
-    setLocalStorageItem(key, newValue)
-  }, [key])
+  const setStoredValue = useCallback(
+    (newValue: T) => {
+      setValue(newValue);
+      setLocalStorageItem(key, newValue);
+    },
+    [key]
+  );
 
   // Listen for changes from other tabs/windows
   useEffect(() => {
     if (!isLocalStorageAvailable()) {
-      return
+      return;
     }
 
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === key && e.newValue !== null) {
         try {
-          setValue(JSON.parse(e.newValue))
+          setValue(JSON.parse(e.newValue));
         } catch {
           // If parsing fails, keep current value
         }
       }
-    }
+    };
 
-    window.addEventListener('storage', handleStorageChange)
-    return () => window.removeEventListener('storage', handleStorageChange)
-  }, [key])
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [key]);
 
-  return [value, setStoredValue]
+  return [value, setStoredValue];
 }
 
 /**
@@ -87,7 +90,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T): [T, (value: T)
  * ```
  */
 export function useLocalStorageFlag(key: string, defaultValue: boolean = false): [boolean, (value: boolean) => void] {
-  return useLocalStorage(key, defaultValue)
+  return useLocalStorage(key, defaultValue);
 }
 
 /**
@@ -112,16 +115,16 @@ export function useLocalStorageFlag(key: string, defaultValue: boolean = false):
  * ```
  */
 export function useLocalStorageWithRemove<T>(key: string, defaultValue: T) {
-  const [value, setValue] = useLocalStorage(key, defaultValue)
+  const [value, setValue] = useLocalStorage(key, defaultValue);
 
   const removeValue = useCallback(() => {
-    setValue(defaultValue)
-    removeLocalStorageItem(key)
-  }, [key, defaultValue, setValue])
+    setValue(defaultValue);
+    removeLocalStorageItem(key);
+  }, [key, defaultValue, setValue]);
 
   return {
     value,
     setValue,
-    removeValue
-  }
+    removeValue,
+  };
 }
