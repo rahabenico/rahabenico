@@ -48,7 +48,7 @@ importers:
         specifier: ^19.2.0
         version: 19.2.3(react@19.2.3)
       react-qr-code:
-        specifier: ^2.0.18
+        specifier: ^2.0.15
         version: 2.0.18(react@19.2.3)
       react-router-dom:
         specifier: ^7.12.0

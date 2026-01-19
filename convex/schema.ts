@@ -6,8 +6,7 @@ export default defineSchema({
     customId: v.string(),
     task: v.string(),
     editKey: v.string(),
-  })
-    .index("by_customId", ["customId"]),
+  }).index("by_customId", ["customId"]),
 
   cardEntries: defineTable({
     username: v.string(),
@@ -22,6 +21,7 @@ export default defineSchema({
     date: v.number(), // timestamp
     comment: v.optional(v.string()),
     photo: v.optional(v.string()), // URL
+    instagram: v.optional(v.string()), // Instagram handle
     cardId: v.id("cards"),
   })
     .index("by_cardId", ["cardId"])
@@ -39,7 +39,5 @@ export default defineSchema({
   taskSuggestions: defineTable({
     description: v.string(),
     cardEntryId: v.id("cardEntries"),
-  })
-    .index("by_cardEntryId", ["cardEntryId"]),
+  }).index("by_cardEntryId", ["cardEntryId"]),
 });
-

@@ -10,6 +10,7 @@ import { useGPS } from "@/lib/hooks/useGPS"
 import { GPSField } from "@/components/form/GPSField"
 import { DateField } from "@/components/form/DateField"
 import { CommentField } from "@/components/form/CommentField"
+import { InstagramField } from "@/components/form/InstagramField"
 import { SuggestionsField } from "@/components/form/SuggestionsField"
 import { getFieldError } from "@/lib/utils/validation"
 
@@ -26,6 +27,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
     handleDateChange,
     handleSubmit,
     toggleComment,
+    toggleInstagram,
     toggleArtistSuggestions,
     toggleTaskSuggestions,
     addArtistSuggestion,
@@ -115,6 +117,14 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
           onChange={(value) => handleFieldChange('comment', value)}
           isVisible={formState.showComment}
           onToggle={toggleComment}
+        />
+
+        {/* Instagram - Optional */}
+        <InstagramField
+          value={formState.instagram}
+          onChange={(value) => handleFieldChange('instagram', value)}
+          isVisible={formState.showInstagram}
+          onToggle={toggleInstagram}
         />
 
         {/* Artist Suggestions - Optional */}

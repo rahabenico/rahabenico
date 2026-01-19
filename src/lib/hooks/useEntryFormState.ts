@@ -1,28 +1,29 @@
-import { useState, useCallback } from 'react'
-import { useMutation } from 'convex/react'
-import { api } from '../../../convex/_generated/api'
-import type { Id } from '../../../convex/_generated/dataModel'
-import { setLocalStorageItem } from '../utils/localStorage'
-import { validateEntryForm, type ValidationResult } from '../utils/validation'
-import type { GPSPosition } from '../utils/geolocation'
+import { useMutation } from "convex/react";
+import { useCallback, useState } from "react";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
+import type { GPSPosition } from "../utils/geolocation";
+import { type ValidationResult, validateEntryForm } from "../utils/validation";
 
 export interface EntryFormData {
-  username: string
-  date: Date | undefined
-  location: string
-  comment: string
-  showComment: boolean
-  gpsPosition: GPSPosition | null
-  city: string
-  artistSuggestions: string[]
-  taskSuggestions: string[]
-  showArtistSuggestions: boolean
-  showTaskSuggestions: boolean
+  username: string;
+  date: Date | undefined;
+  location: string;
+  comment: string;
+  showComment: boolean;
+  instagram: string;
+  showInstagram: boolean;
+  gpsPosition: GPSPosition | null;
+  city: string;
+  artistSuggestions: string[];
+  taskSuggestions: string[];
+  showArtistSuggestions: boolean;
+  showTaskSuggestions: boolean;
 }
 
 export interface EntryFormState extends EntryFormData {
-  isSubmitting: boolean
-  validation: ValidationResult
+  isSubmitting: boolean;
+  validation: ValidationResult;
 }
 
 /**
@@ -66,172 +67,177 @@ export interface EntryFormState extends EntryFormData {
  * ```
  */
 export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
-  const createCardEntry = useMutation(api.cardEntries.createCardEntry)
+  const createCardEntry = useMutation(api.cardEntries.createCardEntry);
 
   const [formState, setFormState] = useState<EntryFormState>({
-    username: '',
+    username: "",
     date: undefined,
-    location: '',
-    comment: '',
+    location: "",
+    comment: "",
     showComment: false,
+    instagram: "",
+    showInstagram: false,
     gpsPosition: null,
-    city: '',
-    artistSuggestions: [''],
-    taskSuggestions: [''],
+    city: "",
+    artistSuggestions: [""],
+    taskSuggestions: [""],
     showArtistSuggestions: false,
     showTaskSuggestions: false,
     isSubmitting: false,
-    validation: { isValid: true, errors: [] }
-  })
+    validation: { isValid: true, errors: [] },
+  });
 
-  const updateFormField = <K extends keyof EntryFormData>(
-    field: K,
-    value: EntryFormData[K]
-  ) => {
-    setFormState(prev => ({
+  const updateFormField = <K extends keyof EntryFormData>(field: K, value: EntryFormData[K]) => {
+    setFormState((prev) => ({
       ...prev,
       [field]: value,
       validation: {
         ...prev.validation,
-        errors: prev.validation.errors.filter(error => error.field !== field)
-      }
-    }))
-  }
+        errors: prev.validation.errors.filter((error) => error.field !== field),
+      },
+    }));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    updateFormField(name as keyof EntryFormData, value)
-  }
+    const { name, value } = e.target;
+    updateFormField(name as keyof EntryFormData, value);
+  };
 
   const handleFieldChange = (field: keyof EntryFormData, value: EntryFormData[keyof EntryFormData]) => {
-    updateFormField(field, value)
-  }
+    updateFormField(field, value);
+  };
 
   const handleDateChange = (date: Date | undefined) => {
     if (date) {
       // Preserve the current time or set to current time if date was previously undefined
-      const currentDate = formState.date || new Date()
-      const newDate = new Date(date)
-      newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds())
-      updateFormField('date', newDate)
+      const currentDate = formState.date || new Date();
+      const newDate = new Date(date);
+      newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds());
+      updateFormField("date", newDate);
     } else {
-      updateFormField('date', date)
+      updateFormField("date", date);
     }
-  }
+  };
 
   const toggleComment = () => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       showComment: !prev.showComment,
-      comment: !prev.showComment ? prev.comment : ''
-    }))
-  }
+      comment: !prev.showComment ? prev.comment : "",
+    }));
+  };
+
+  const toggleInstagram = () => {
+    setFormState((prev) => ({
+      ...prev,
+      showInstagram: !prev.showInstagram,
+      instagram: !prev.showInstagram ? prev.instagram : "",
+    }));
+  };
 
   const toggleArtistSuggestions = () => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       showArtistSuggestions: !prev.showArtistSuggestions,
-      artistSuggestions: !prev.showArtistSuggestions ? [''] : ['']
-    }))
-  }
+      artistSuggestions: !prev.showArtistSuggestions ? [""] : [""],
+    }));
+  };
 
   const toggleTaskSuggestions = () => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       showTaskSuggestions: !prev.showTaskSuggestions,
-      taskSuggestions: !prev.showTaskSuggestions ? [''] : ['']
-    }))
-  }
+      taskSuggestions: !prev.showTaskSuggestions ? [""] : [""],
+    }));
+  };
 
   const addArtistSuggestion = () => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
-      artistSuggestions: [...prev.artistSuggestions, '']
-    }))
-  }
+      artistSuggestions: [...prev.artistSuggestions, ""],
+    }));
+  };
 
   const removeArtistSuggestion = (index: number) => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
-      artistSuggestions: prev.artistSuggestions.filter((_, i) => i !== index)
-    }))
-  }
+      artistSuggestions: prev.artistSuggestions.filter((_, i) => i !== index),
+    }));
+  };
 
   const updateArtistSuggestion = (index: number, value: string) => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
-      artistSuggestions: prev.artistSuggestions.map((suggestion, i) =>
-        i === index ? value : suggestion
-      )
-    }))
-  }
+      artistSuggestions: prev.artistSuggestions.map((suggestion, i) => (i === index ? value : suggestion)),
+    }));
+  };
 
   const addTaskSuggestion = () => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
-      taskSuggestions: [...prev.taskSuggestions, '']
-    }))
-  }
+      taskSuggestions: [...prev.taskSuggestions, ""],
+    }));
+  };
 
   const removeTaskSuggestion = (index: number) => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
-      taskSuggestions: prev.taskSuggestions.filter((_, i) => i !== index)
-    }))
-  }
+      taskSuggestions: prev.taskSuggestions.filter((_, i) => i !== index),
+    }));
+  };
 
   const updateTaskSuggestion = (index: number, value: string) => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
-      taskSuggestions: prev.taskSuggestions.map((suggestion, i) =>
-        i === index ? value : suggestion
-      )
-    }))
-  }
+      taskSuggestions: prev.taskSuggestions.map((suggestion, i) => (i === index ? value : suggestion)),
+    }));
+  };
 
-  const setGPSData = useCallback((position: GPSPosition | null, city: string = '') => {
-    setFormState(prev => ({
+  const setGPSData = useCallback((position: GPSPosition | null, city: string = "") => {
+    setFormState((prev) => ({
       ...prev,
       gpsPosition: position,
-      city
-    }))
-  }, [])
+      city,
+    }));
+  }, []);
 
   const resetForm = () => {
     setFormState({
-      username: '',
+      username: "",
       date: undefined,
-      location: '',
-      comment: '',
+      location: "",
+      comment: "",
       showComment: false,
+      instagram: "",
+      showInstagram: false,
       gpsPosition: null,
-      city: '',
-      artistSuggestions: [''],
-      taskSuggestions: [''],
+      city: "",
+      artistSuggestions: [""],
+      taskSuggestions: [""],
       showArtistSuggestions: false,
       showTaskSuggestions: false,
       isSubmitting: false,
-      validation: { isValid: true, errors: [] }
-    })
-  }
+      validation: { isValid: true, errors: [] },
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const validationResult = validateEntryForm(formState.username, formState.date)
-    setFormState(prev => ({
+    const validationResult = validateEntryForm(formState.username, formState.date);
+    setFormState((prev) => ({
       ...prev,
-      validation: validationResult
-    }))
+      validation: validationResult,
+    }));
 
     if (!validationResult.isValid) {
-      return
+      return;
     }
 
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
-      isSubmitting: true
-    }))
+      isSubmitting: true,
+    }));
 
     try {
       await createCardEntry({
@@ -242,34 +248,35 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
         location: formState.location.trim() || undefined,
         city: formState.city.trim() || undefined,
         comment: formState.comment.trim() || undefined,
+        instagram: formState.instagram.trim() || undefined,
         artistSuggestions: formState.showArtistSuggestions
-          ? formState.artistSuggestions.filter(s => s.trim()).length > 0
-            ? formState.artistSuggestions.filter(s => s.trim())
+          ? formState.artistSuggestions.filter((s) => s.trim()).length > 0
+            ? formState.artistSuggestions.filter((s) => s.trim())
             : undefined
           : undefined,
         taskSuggestions: formState.showTaskSuggestions
-          ? formState.taskSuggestions.filter(s => s.trim()).length > 0
-            ? formState.taskSuggestions.filter(s => s.trim())
+          ? formState.taskSuggestions.filter((s) => s.trim()).length > 0
+            ? formState.taskSuggestions.filter((s) => s.trim())
             : undefined
           : undefined,
-      })
+      });
 
       // Reset form
-      resetForm()
+      resetForm();
 
       // Call success callback
       if (onSuccess) {
-        onSuccess()
+        onSuccess();
       }
     } catch (error) {
-      console.error("Error creating entry:", error)
-      alert("Failed to save entry. Please try again.")
-      setFormState(prev => ({
+      console.error("Error creating entry:", error);
+      alert("Failed to save entry. Please try again.");
+      setFormState((prev) => ({
         ...prev,
-        isSubmitting: false
-      }))
+        isSubmitting: false,
+      }));
     }
-  }
+  };
 
   return {
     formState,
@@ -278,6 +285,7 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     handleDateChange,
     handleSubmit,
     toggleComment,
+    toggleInstagram,
     toggleArtistSuggestions,
     toggleTaskSuggestions,
     addArtistSuggestion,
@@ -288,5 +296,5 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     updateTaskSuggestion,
     setGPSData,
     resetForm,
-  }
+  };
 }

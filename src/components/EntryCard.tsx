@@ -1,4 +1,4 @@
-import { CalendarIcon, LocationIcon, MusicNoteIcon } from "@hugeicons/core-free-icons";
+import { CalendarIcon, Instagram, LocationIcon, MusicNoteIcon } from "@hugeicons/core-free-icons";
 import { IconItem } from "@/components/IconItem";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card/card";
@@ -16,6 +16,7 @@ interface CardEntryProps {
     gpsPosition?: { lat: number; lng: number };
     city?: string;
     comment?: string;
+    instagram?: string;
     artistSuggestions?: string[];
     taskSuggestions?: string[];
   };
@@ -50,6 +51,19 @@ export function EntryCard({ entry }: CardEntryProps) {
             </IconItem>
           )}
 
+          {entry.instagram && (
+            <IconItem icon={Instagram} className="text-sm">
+              <a
+                href={`https://www.instagram.com/${entry.instagram.replace("@", "")}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-black underline"
+              >
+                @{entry.instagram.replace("@", "")}
+              </a>
+            </IconItem>
+          )}
+
           {entry.artistSuggestions && entry.artistSuggestions.length > 0 && (
             <IconItem icon={MusicNoteIcon}>
               {entry.artistSuggestions.map((artist) => (
@@ -64,24 +78,6 @@ export function EntryCard({ entry }: CardEntryProps) {
             <p className="whitespace-pre-wrap text-sm leading-relaxed">"{entry.comment}"</p>
           </div>
         )}
-
-        {/* {entry.taskSuggestions && entry.taskSuggestions.length > 0 && (
-          <div className="pt-3 border-t border-black/20">
-            <div className="flex items-start gap-3">
-              <HugeiconsIcon icon={LayoutIcon} className="h-5 w-5 text-black mt-0.5 shrink-0" />
-              <div className="flex-1">
-                <p className="text-sm font-bold text-black mb-2">Task Suggestions</p>
-                <div className="space-y-1">
-                  {entry.taskSuggestions.map((task, index) => (
-                    <p key={index} className="text-base font-medium text-black">
-                      • {task}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )} */}
       </CardContent>
     </Card>
   );

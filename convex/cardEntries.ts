@@ -1,5 +1,5 @@
-import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
 
 export const getCardByCustomId = query({
   args: { customId: v.string() },
@@ -68,8 +68,8 @@ export const getCardEntriesByCardId = query({
 
         return {
           ...entry,
-          artistSuggestions: artistSuggestions.map(s => s.name),
-          taskSuggestions: taskSuggestions.map(s => s.description),
+          artistSuggestions: artistSuggestions.map((s) => s.name),
+          taskSuggestions: taskSuggestions.map((s) => s.description),
         };
       })
     );
@@ -77,7 +77,6 @@ export const getCardEntriesByCardId = query({
     return entriesWithSuggestions;
   },
 });
-
 
 export const createCard = mutation({
   args: {
@@ -122,6 +121,7 @@ export const createCardEntry = mutation({
     city: v.optional(v.string()),
     date: v.number(),
     comment: v.optional(v.string()),
+    instagram: v.optional(v.string()),
     artistSuggestions: v.optional(v.array(v.string())),
     taskSuggestions: v.optional(v.array(v.string())),
   },
@@ -135,6 +135,7 @@ export const createCardEntry = mutation({
       city: args.city,
       date: args.date,
       comment: args.comment,
+      instagram: args.instagram,
     });
 
     // Create artist suggestions if provided
@@ -182,4 +183,3 @@ export const createCardEntry = mutation({
     return cardEntryId;
   },
 });
-

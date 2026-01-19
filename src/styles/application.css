@@ -12,8 +12,9 @@
     --card-foreground: oklch(0.147 0.004 49.25);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.147 0.004 49.25);
-    --primary: oklch(0.59 0.22 1);
+    --primary: #7E20D1;
     --primary-foreground: oklch(0.97 0.01 343);
+    --primary-subtle: oklch(0.85 0.15 293);
     --secondary: oklch(0.967 0.001 286.375);
     --secondary-foreground: oklch(0.21 0.006 285.885);
     --muted: oklch(0.97 0.001 106.424);
@@ -47,8 +48,9 @@
     --card-foreground: oklch(0.985 0.001 106.423);
     --popover: oklch(0.216 0.006 56.043);
     --popover-foreground: oklch(0.985 0.001 106.423);
-    --primary: oklch(0.66 0.21 354);
+    --primary: oklch(0.45 0.78 293);
     --primary-foreground: oklch(0.97 0.01 343);
+    --primary-subtle: oklch(0.25 0.12 293);
     --secondary: oklch(0.274 0.006 286.033);
     --secondary-foreground: oklch(0.985 0 0);
     --muted: oklch(0.268 0.007 34.298);
@@ -75,8 +77,8 @@
 }
 
 @theme inline {
-    --font-sans: 'DM Sans', sans-serif;
-    --font-headline: 'Vampiro One', cursive;
+    --font-sans: 'Goldman', sans-serif;
+    --font-headline: 'Goldman', sans-serif;
     --font-family-headline: var(--font-headline);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -103,6 +105,7 @@
     --color-secondary: var(--secondary);
     --color-primary-foreground: var(--primary-foreground);
     --color-primary: var(--primary);
+    --color-primary-subtle: var(--primary-subtle);
     --color-popover-foreground: var(--popover-foreground);
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
