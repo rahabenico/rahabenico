@@ -22,6 +22,7 @@ export default defineSchema({
     comment: v.optional(v.string()),
     photo: v.optional(v.string()), // URL
     instagram: v.optional(v.string()), // Instagram handle
+    interestedInBuying: v.optional(v.boolean()), // Whether user is interested in buying cards
     cardId: v.id("cards"),
   })
     .index("by_cardId", ["cardId"])

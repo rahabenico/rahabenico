@@ -24,6 +24,7 @@ export interface EntryFormData {
   taskSuggestions: SuggestionItem[];
   showArtistSuggestions: boolean;
   showTaskSuggestions: boolean;
+  interestedInBuying: boolean;
 }
 
 export interface EntryFormState extends EntryFormData {
@@ -88,6 +89,7 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     taskSuggestions: [{ id: "task-0", value: "" }],
     showArtistSuggestions: false,
     showTaskSuggestions: false,
+    interestedInBuying: false,
     isSubmitting: false,
     validation: { isValid: true, errors: [] },
   });
@@ -237,6 +239,7 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
       taskSuggestions: [{ id: "task-0", value: "" }],
       showArtistSuggestions: false,
       showTaskSuggestions: false,
+      interestedInBuying: false,
       isSubmitting: false,
       validation: { isValid: true, errors: [] },
     });
@@ -270,6 +273,7 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
         city: formState.city.trim() || undefined,
         comment: formState.comment.trim() || undefined,
         instagram: formState.instagram.trim() || undefined,
+        interestedInBuying: formState.interestedInBuying || undefined,
         artistSuggestions: formState.showArtistSuggestions
           ? formState.artistSuggestions.filter((s) => s.value.trim()).length > 0
             ? formState.artistSuggestions.filter((s) => s.value.trim()).map((s) => s.value)

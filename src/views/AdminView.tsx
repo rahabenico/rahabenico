@@ -1,5 +1,6 @@
 import { DownloadIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useQuery } from "convex/react";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
@@ -15,10 +16,12 @@ import { LoadingBar } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useCardCreation } from "@/lib/hooks/useCardCreation";
 import { getFieldError } from "@/lib/utils/validation";
+import { api } from "../../convex/_generated/api";
 
 function AdminView() {
   const { formState, validation, handleInputChange, handleSubmit } = useCardCreation();
   const [copySuccess, setCopySuccess] = useState(false);
+  const interestedBuyersCount = useQuery(api.cardEntries.getInterestedBuyersCount);
 
   const handleCopyUrl = async () => {
     if (formState.generatedUrl) {
@@ -128,6 +131,18 @@ function AdminView() {
                 </Button>
               </div>
             </form>
+          </CardContent>
+        </Card>
+
+        {/* Interested Buyers Count */}
+        <Card className="border border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+          <CardHeader>
+            <CardTitle className="text-blue-900 dark:text-blue-100">Market Interest</CardTitle>
+            <CardDescription>Number of users interested in buying their own set of cards</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="font-bold text-3xl text-blue-900 dark:text-blue-100">{interestedBuyersCount ?? 0}</div>
+            <p className="mt-1 text-blue-700 text-sm dark:text-blue-300">Total interested users</p>
           </CardContent>
         </Card>
 

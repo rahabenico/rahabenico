@@ -78,6 +78,14 @@ export const getCardEntriesByCardId = query({
   },
 });
 
+export const getInterestedBuyersCount = query({
+  handler: async (ctx) => {
+    const entries = await ctx.db.query("cardEntries").collect();
+    const interestedCount = entries.filter((entry) => entry.interestedInBuying === true).length;
+    return interestedCount;
+  },
+});
+
 export const createCard = mutation({
   args: {
     customId: v.string(),
@@ -122,6 +130,7 @@ export const createCardEntry = mutation({
     date: v.number(),
     comment: v.optional(v.string()),
     instagram: v.optional(v.string()),
+    interestedInBuying: v.optional(v.boolean()),
     artistSuggestions: v.optional(v.array(v.string())),
     taskSuggestions: v.optional(v.array(v.string())),
   },
@@ -136,6 +145,7 @@ export const createCardEntry = mutation({
       date: args.date,
       comment: args.comment,
       instagram: args.instagram,
+      interestedInBuying: args.interestedInBuying,
     });
 
     // Create artist suggestions if provided
