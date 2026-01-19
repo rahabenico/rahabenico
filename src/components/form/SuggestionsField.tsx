@@ -97,10 +97,12 @@ export function SuggestionsField({
               )}
             </div>
           ))}
-          <Button type="button" variant="outline" onClick={onAdd} className="w-full">
-            <HugeiconsIcon icon={PlusSignIcon} className="mr-2 h-4 w-4" />
-            Add {title.toLowerCase()}
-          </Button>
+          {suggestions.length < 3 && (
+            <Button type="button" variant="outline" onClick={onAdd} className="w-full">
+              <HugeiconsIcon icon={PlusSignIcon} className="mr-2 h-4 w-4" />
+              Add {title.toLowerCase()}
+            </Button>
+          )}
         </div>
       </FieldContent>
     </Field>

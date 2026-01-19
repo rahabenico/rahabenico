@@ -159,10 +159,15 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
   };
 
   const addArtistSuggestion = () => {
-    setFormState((prev) => ({
-      ...prev,
-      artistSuggestions: [...prev.artistSuggestions, { id: `artist-${Date.now()}`, value: "" }],
-    }));
+    setFormState((prev) => {
+      if (prev.artistSuggestions.length >= 3) {
+        return prev;
+      }
+      return {
+        ...prev,
+        artistSuggestions: [...prev.artistSuggestions, { id: `artist-${Date.now()}`, value: "" }],
+      };
+    });
   };
 
   const removeArtistSuggestion = (index: number) => {
@@ -182,10 +187,15 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
   };
 
   const addTaskSuggestion = () => {
-    setFormState((prev) => ({
-      ...prev,
-      taskSuggestions: [...prev.taskSuggestions, { id: `task-${Date.now()}`, value: "" }],
-    }));
+    setFormState((prev) => {
+      if (prev.taskSuggestions.length >= 3) {
+        return prev;
+      }
+      return {
+        ...prev,
+        taskSuggestions: [...prev.taskSuggestions, { id: `task-${Date.now()}`, value: "" }],
+      };
+    });
   };
 
   const removeTaskSuggestion = (index: number) => {

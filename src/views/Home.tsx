@@ -1,5 +1,6 @@
 import { useQuery } from "convex/react";
 import { useState } from "react";
+import RahabenicoLogo from "@/assets/rahabenico.svg";
 import { Heading } from "@/components/Heading";
 import { Teaser } from "@/components/Teaser";
 import { LoadingBar } from "@/components/ui/spinner";
@@ -15,16 +16,21 @@ function Home() {
   return (
     <>
       <LoadingBar isLoading={isLoading} />
-      <div className="container mx-auto max-w-4xl space-y-12 px-4 py-12">
+      <div className="container mx-auto max-w-4xl space-y-12 px-4 py-8 md:py-12">
         <div className="space-y-4">
-          <Heading level={1} variant="main">
-            Welcome to <span className="text-[#7E20D1]">rahabenico</span>
-          </Heading>
-          <Heading level={2}>
-            <span className="text-[#7E20D1]">Ra</span>ve <span className="text-[#7E20D1]">ha</span>rd.{" "}
-            <span className="text-[#7E20D1]">Be</span> <span className="text-[#7E20D1]">ni</span>ce.{" "}
-            <span className="text-[#7E20D1]">Co</span>nnect.
-          </Heading>
+          <div className="flex items-center gap-6">
+            <div>
+              <Heading level={1} variant="main">
+                Welcome to <span className="text-[#7E20D1]">rahabenico</span>
+              </Heading>
+              <Heading level={2}>
+                <span className="text-[#7E20D1]">Ra</span>ve <span className="text-[#7E20D1]">ha</span>rd.{" "}
+                <span className="text-[#7E20D1]">Be</span> <span className="text-[#7E20D1]">ni</span>ce.{" "}
+                <span className="text-[#7E20D1]">Co</span>nnect.
+              </Heading>
+            </div>
+            <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
+          </div>
           <p>
             This is a platform for connecting with others at raves. It's a place to share your experiences, find new
             friends, and explore new music.
