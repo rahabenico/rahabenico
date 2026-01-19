@@ -20,7 +20,7 @@ export function FloatingButton({
     <Button
       size={size}
       onClick={onClick}
-      className={`fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full px-8 py-6 text-md shadow-lg ${className}`}
+      className={`fixed bottom-16 left-1/2 z-50 -translate-x-1/2 rounded-full px-8 py-6 text-md shadow-lg ${className}`}
       aria-label={ariaLabel}
     >
       {children}

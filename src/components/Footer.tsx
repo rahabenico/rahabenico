@@ -3,7 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 
 export function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white py-4 dark:border-gray-800 dark:bg-gray-950">
+    <footer className="fixed right-0 bottom-0 left-0 border-gray-200 border-t bg-white py-3 dark:border-gray-800 dark:bg-gray-950">
       <div className="container mx-auto max-w-4xl px-4">
         <div className="flex items-center justify-center">
           <a
