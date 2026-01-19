@@ -1,104 +1,78 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getLocalStorageItem, removeLocalStorageItem, setLocalStorageItem } from "@/lib/utils/localStorage";
 
 interface UseCardStateOptions {
   id: string | undefined;
   editKey?: string;
-  isLoading?: boolean;
 }
 
 interface CardState {
-  isEditable: boolean;
-  closeCardForm: () => void;
-  openCardForm: (key: string) => void;
+  editMode: boolean;
+  closeEntryWindow: () => void;
 }
 
 /**
  * Hook for managing card edit state and localStorage
  * Handles edit key validation, URL parameter processing, and card form closure
  */
-export function useCardState({ id, editKey, isLoading = false }: UseCardStateOptions): CardState {
+export function useCardState({ id, editKey }: UseCardStateOptions): CardState {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   // Initialize isEditable based on localStorage state and URL params
-  const [isEditable, setIsEditable] = useState(() => {
-    if (!id) return false;
+  const [editMode, setEditMode] = useState(false);
 
-    const closed = getLocalStorageItem<boolean>(`closed-${id}`, false);
-    if (closed) return false;
-
-    // Check for saved edit key
-    const savedEditKey = getLocalStorageItem<string | null>(`key-${id}`, null);
-    if (savedEditKey && editKey && savedEditKey === editKey) {
-      return true;
-    }
-
-    // Check URL edit key
-    const urlEditKey = searchParams.get("key");
-    if (urlEditKey && editKey && urlEditKey === editKey) {
-      return true;
-    }
-
-    return false;
+  const updateEditMode = useEffectEvent((state: boolean) => {
+    console.log("updateEditMode", state);
+    setEditMode(state);
   });
 
-  // Close card form editing - removes edit key and marks as closed
-  const closeCardForm = useCallback(() => {
-    if (!id) return;
-
-    removeLocalStorageItem(`key-${id}`);
-    setLocalStorageItem(`closed-${id}`, true);
-    setIsEditable(false);
-
-    // Remove key from URL if present
+  const handleUrlKey = useEffectEvent(() => {
     const newSearchParams = new URLSearchParams(searchParams);
+
     newSearchParams.delete("key");
     navigate({ search: newSearchParams.toString() }, { replace: true });
-  }, [id, searchParams, navigate]);
-
-  // Open card form for editing with a valid key
-  const openCardForm = useCallback(
-    (key: string) => {
-      if (!id || !key) return;
-
-      setLocalStorageItem(`key-${id}`, key);
-      setIsEditable(true);
-
-      // Remove key from URL after saving to localStorage
-      const newSearchParams = new URLSearchParams(searchParams);
-      newSearchParams.delete("key");
-      navigate({ search: newSearchParams.toString() }, { replace: true });
-    },
-    [id, searchParams, navigate]
-  );
+  });
 
   useEffect(() => {
-    if (!id || isLoading) return;
+    if (!id || !editKey) return;
 
-    const urlEditKey = searchParams.get("key");
-    const newSearchParams = new URLSearchParams(searchParams);
-
-    // Check if card form was previously closed - only handle navigation
     const closed = getLocalStorageItem<boolean>(`closed-${id}`, false);
+
     if (closed) {
-      newSearchParams.delete("key");
-      navigate({ search: newSearchParams.toString() }, { replace: true });
       return;
     }
 
+    const urlKey = searchParams.get("key");
+
     // Handle URL edit key - save to localStorage and navigate (state already set in initial state)
-    if (urlEditKey && editKey && urlEditKey === editKey) {
-      setLocalStorageItem(`key-${id}`, urlEditKey);
-      newSearchParams.delete("key");
-      navigate({ search: newSearchParams.toString() }, { replace: true });
+    if (urlKey === editKey) {
+      setLocalStorageItem(`key-${id}`, urlKey);
+      handleUrlKey();
+      updateEditMode(true);
+
+      return;
     }
-  }, [id, isLoading, editKey, searchParams, navigate]);
+
+    const savedKey = getLocalStorageItem<string | null>(`key-${id}`, null);
+
+    if (savedKey && savedKey === editKey) {
+      updateEditMode(true);
+      return;
+    }
+
+    return;
+  }, [id, editKey, searchParams]);
+
+  const closeEntryWindow = () => {
+    removeLocalStorageItem(`key-${id}`);
+    setLocalStorageItem(`closed-${id}`, true);
+    setEditMode(false);
+  };
 
   return {
-    isEditable,
-    closeCardForm,
-    openCardForm,
+    editMode,
+    closeEntryWindow,
   };
 }

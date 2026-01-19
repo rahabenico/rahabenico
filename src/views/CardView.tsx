@@ -13,15 +13,14 @@ function CardView() {
   const [isOpen, setIsOpen] = useState(false);
 
   const { card, entries, isLoading } = useCardData(id);
-  const { isEditable, closeCardForm } = useCardState({
+  const { editMode, closeEntryWindow } = useCardState({
     id,
     editKey: card?.editKey,
-    isLoading: isLoading || false,
   });
 
   const handleSuccess = () => {
     setIsOpen(false);
-    closeCardForm();
+    closeEntryWindow();
   };
 
   if (!id) {
@@ -60,7 +59,7 @@ function CardView() {
         )}
       </div>
 
-      {isEditable && (
+      {editMode && (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <FloatingButton aria-label="Open form">Add entry</FloatingButton>
