@@ -1,6 +1,5 @@
 import { ConvexProvider } from "convex/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Chat } from "./components/Chat";
 import { Footer } from "./components/Footer";
 import { convex } from "./lib/convex";
 import AdminView from "./views/AdminView";
