@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { CardViewHeader } from "@/components/CardViewHeader";
 import { EntryCard } from "@/components/EntryCard";
 import { EntryForm } from "@/components/EntryForm";
 import { FloatingButton } from "@/components/FloatingButton";
+import { Header } from "@/components/header";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LoadingBar } from "@/components/ui/spinner";
 import { useCardData } from "@/lib/hooks/useCardData";
@@ -43,7 +43,7 @@ function CardView() {
 
   return (
     <>
-      <CardViewHeader />
+      <Header />
       <div className="container mx-auto flex max-w-4xl flex-col gap-6 p-6 md:gap-8 md:p-12">
         <div className="flex flex-col gap-1 text-center">
           <h1 className="mb-2 font-bold font-headline text-3xl">{id}</h1>

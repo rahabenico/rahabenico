@@ -1,8 +1,8 @@
 import { SaveMoneyEuroIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import RahabenicoLogo from "@/assets/rahabenico.svg";
-import { Header } from "@/components/CardViewHeader";
 import { Heading } from "@/components/Heading";
+import { Header } from "@/components/header";
 
 function Support() {
   return (
