@@ -41,4 +41,10 @@ export default defineSchema({
     description: v.string(),
     cardEntryId: v.id("cardEntries"),
   }).index("by_cardEntryId", ["cardEntryId"]),
+
+  messages: defineTable({
+    username: v.string(),
+    content: v.string(),
+    timestamp: v.number(),
+  }).index("by_timestamp", ["timestamp"]),
 });
