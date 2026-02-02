@@ -85,9 +85,9 @@ export const sendNotificationEmails = internalAction({
     cardCustomId: v.string(),
     entryUsername: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ sent: number; total?: number; error?: string; errors?: string[] }> => {
     // Get all subscribers for this card
-    const subscribers = await ctx.runQuery(internal.subscribers.getCardSubscribers, {
+    const subscribers: string[] = await ctx.runQuery(internal.subscribers.getCardSubscribers, {
       cardId: args.cardId,
     });
 

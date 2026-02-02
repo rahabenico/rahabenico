@@ -23,7 +23,6 @@ export function App() {
           <Route path="/unsubscribe" element={<Unsubscribe />} />
         </Routes>
         <Footer />
-        <Chat />
       </BrowserRouter>
     </ConvexProvider>
   );

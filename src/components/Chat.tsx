@@ -60,11 +60,7 @@ export function Chat() {
   return (
     <>
       {/* Floating Chat Button */}
-      <Button
-        onClick={() => setIsOpen(true)}
-        className="fixed right-6 bottom-20 z-40 rounded-full px-6 py-3 shadow-lg"
-        aria-label="Open chat"
-      >
+      <Button onClick={() => setIsOpen(true)} className="rounded-full px-6 py-3 shadow-lg" aria-label="Open chat">
         <HugeiconsIcon icon={MessageCircle} className="mr-2 h-5 w-5" />
         Chat
       </Button>
