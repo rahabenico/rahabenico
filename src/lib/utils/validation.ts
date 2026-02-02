@@ -1,11 +1,11 @@
 export interface ValidationError {
-  field: string
-  message: string
+  field: string;
+  message: string;
 }
 
 export interface ValidationResult {
-  isValid: boolean
-  errors: ValidationError[]
+  isValid: boolean;
+  errors: ValidationError[];
 }
 
 /**
@@ -27,10 +27,10 @@ export function validateRequired(value: string, fieldName: string): ValidationEr
   if (!value.trim()) {
     return {
       field: fieldName,
-      message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`
-    }
+      message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`,
+    };
   }
-  return null
+  return null;
 }
 
 /**
@@ -52,10 +52,42 @@ export function validateRequiredDate(value: Date | undefined, fieldName: string)
   if (!value) {
     return {
       field: fieldName,
-      message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`
-    }
+      message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`,
+    };
   }
-  return null
+  return null;
+}
+
+/**
+ * Validates an email address format
+ *
+ * @param value - The email value to validate
+ * @param fieldName - The name of the field for error messages
+ * @returns A ValidationError if invalid, null if valid
+ *
+ * @example
+ * ```typescript
+ * const error = validateEmail('invalid-email', 'email')
+ * if (error) {
+ *   console.log(error.message) // "Email is invalid"
+ * }
+ * ```
+ */
+export function validateEmail(value: string, fieldName: string): ValidationError | null {
+  if (!value.trim()) {
+    return {
+      field: fieldName,
+      message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`,
+    };
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(value.trim())) {
+    return {
+      field: fieldName,
+      message: `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is invalid`,
+    };
+  }
+  return null;
 }
 
 /**
@@ -74,22 +106,22 @@ export function validateRequiredDate(value: Date | undefined, fieldName: string)
  * ```
  */
 export function validateEntryForm(username: string, date: Date | undefined): ValidationResult {
-  const errors: ValidationError[] = []
+  const errors: ValidationError[] = [];
 
-  const usernameError = validateRequired(username, 'username')
+  const usernameError = validateRequired(username, "username");
   if (usernameError) {
-    errors.push(usernameError)
+    errors.push(usernameError);
   }
 
-  const dateError = validateRequiredDate(date, 'date')
+  const dateError = validateRequiredDate(date, "date");
   if (dateError) {
-    errors.push(dateError)
+    errors.push(dateError);
   }
 
   return {
     isValid: errors.length === 0,
-    errors
-  }
+    errors,
+  };
 }
 
 /**
@@ -108,22 +140,22 @@ export function validateEntryForm(username: string, date: Date | undefined): Val
  * ```
  */
 export function validateCardForm(customId: string, task: string): ValidationResult {
-  const errors: ValidationError[] = []
+  const errors: ValidationError[] = [];
 
-  const customIdError = validateRequired(customId, 'Card ID')
+  const customIdError = validateRequired(customId, "Card ID");
   if (customIdError) {
-    errors.push(customIdError)
+    errors.push(customIdError);
   }
 
-  const taskError = validateRequired(task, 'Task')
+  const taskError = validateRequired(task, "Task");
   if (taskError) {
-    errors.push(taskError)
+    errors.push(taskError);
   }
 
   return {
     isValid: errors.length === 0,
-    errors
-  }
+    errors,
+  };
 }
 
 /**
@@ -141,6 +173,6 @@ export function validateCardForm(customId: string, task: string): ValidationResu
  * ```
  */
 export function getFieldError(errors: ValidationError[], fieldName: string): string | undefined {
-  const error = errors.find(err => err.field === fieldName)
-  return error ? error.message : undefined
+  const error = errors.find((err) => err.field === fieldName);
+  return error ? error.message : undefined;
 }

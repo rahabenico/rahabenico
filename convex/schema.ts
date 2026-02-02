@@ -47,4 +47,12 @@ export default defineSchema({
     content: v.string(),
     timestamp: v.number(),
   }).index("by_timestamp", ["timestamp"]),
+
+  cardSubscribers: defineTable({
+    cardId: v.id("cards"),
+    email: v.string(),
+    subscribedAt: v.number(),
+  })
+    .index("by_cardId", ["cardId"])
+    .index("by_cardId_email", ["cardId", "email"]),
 });

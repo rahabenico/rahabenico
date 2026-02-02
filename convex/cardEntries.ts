@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
 import { mutation, query } from "./_generated/server";
 
 export const getCardByCustomId = query({
@@ -156,8 +157,22 @@ export const createCardEntry = mutation({
     interestedInBuying: v.optional(v.boolean()),
     artistSuggestions: v.optional(v.array(v.string())),
     taskSuggestions: v.optional(v.array(v.string())),
+    notificationEmail: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    // Get card to access customId for email notifications
+    const card = await ctx.db.get(args.cardId);
+    if (!card) {
+      throw new Error("Card not found");
+    }
+
+    // Subscribe email if provided
+    if (args.notificationEmail) {
+      await ctx.runMutation(internal.subscribers.subscribeToCard, {
+        cardId: args.cardId,
+        email: args.notificationEmail,
+      });
+    }
     // Create the card entry
     const cardEntryId = await ctx.db.insert("cardEntries", {
       cardId: args.cardId,
@@ -212,6 +227,13 @@ export const createCardEntry = mutation({
         }
       }
     }
+
+    // Send notification emails to subscribers (schedule as action since it needs external API calls)
+    await ctx.scheduler.runAfter(0, internal.subscribers.sendNotificationEmails, {
+      cardId: args.cardId,
+      cardCustomId: card.customId,
+      entryUsername: args.username,
+    });
 
     return cardEntryId;
   },

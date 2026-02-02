@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import type { GPSPosition } from "../utils/geolocation";
-import { type ValidationResult, validateEntryForm } from "../utils/validation";
+import { type ValidationResult, validateEmail, validateEntryForm } from "../utils/validation";
 
 interface SuggestionItem {
   id: string;
@@ -25,6 +25,8 @@ export interface EntryFormData {
   showArtistSuggestions: boolean;
   showTaskSuggestions: boolean;
   interestedInBuying: boolean;
+  wantNotification: boolean;
+  notificationEmail: string;
 }
 
 export interface EntryFormState extends EntryFormData {
@@ -90,6 +92,8 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     showArtistSuggestions: false,
     showTaskSuggestions: false,
     interestedInBuying: false,
+    wantNotification: false,
+    notificationEmail: "",
     isSubmitting: false,
     validation: { isValid: true, errors: [] },
   });
@@ -157,6 +161,14 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
       ...prev,
       showTaskSuggestions: !prev.showTaskSuggestions,
       taskSuggestions: !prev.showTaskSuggestions ? [{ id: "task-0", value: "" }] : [{ id: "task-0", value: "" }],
+    }));
+  };
+
+  const toggleNotification = () => {
+    setFormState((prev) => ({
+      ...prev,
+      wantNotification: !prev.wantNotification,
+      notificationEmail: !prev.wantNotification ? prev.notificationEmail : "",
     }));
   };
 
@@ -240,6 +252,8 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
       showArtistSuggestions: false,
       showTaskSuggestions: false,
       interestedInBuying: false,
+      wantNotification: false,
+      notificationEmail: "",
       isSubmitting: false,
       validation: { isValid: true, errors: [] },
     });
@@ -249,6 +263,16 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     e.preventDefault();
 
     const validationResult = validateEntryForm(formState.username, formState.date);
+
+    // Validate email if notification is requested
+    if (formState.wantNotification) {
+      const emailError = validateEmail(formState.notificationEmail, "notificationEmail");
+      if (emailError) {
+        validationResult.errors.push(emailError);
+        validationResult.isValid = false;
+      }
+    }
+
     setFormState((prev) => ({
       ...prev,
       validation: validationResult,
@@ -274,6 +298,10 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
         comment: formState.comment.trim() || undefined,
         instagram: formState.instagram.trim() || undefined,
         interestedInBuying: formState.interestedInBuying || undefined,
+        notificationEmail:
+          formState.wantNotification && formState.notificationEmail.trim()
+            ? formState.notificationEmail.trim()
+            : undefined,
         artistSuggestions: formState.showArtistSuggestions
           ? formState.artistSuggestions.filter((s) => s.value.trim()).length > 0
             ? formState.artistSuggestions.filter((s) => s.value.trim()).map((s) => s.value)
@@ -313,6 +341,7 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     toggleInstagram,
     toggleArtistSuggestions,
     toggleTaskSuggestions,
+    toggleNotification,
     addArtistSuggestion,
     removeArtistSuggestion,
     updateArtistSuggestion,

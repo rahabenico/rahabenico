@@ -8,6 +8,7 @@ import CardView from "./views/CardView";
 import Contact from "./views/Contact";
 import Home from "./views/Home";
 import Support from "./views/Support";
+import Unsubscribe from "./views/Unsubscribe";
 
 export function App() {
   return (
@@ -19,6 +20,7 @@ export function App() {
           <Route path="/card/:id" element={<CardView />} />
           <Route path="/support" element={<Support />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/unsubscribe" element={<Unsubscribe />} />
         </Routes>
         <Footer />
         <Chat />

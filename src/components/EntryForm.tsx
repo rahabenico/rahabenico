@@ -31,6 +31,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
     toggleInstagram,
     toggleArtistSuggestions,
     toggleTaskSuggestions,
+    toggleNotification,
     addArtistSuggestion,
     removeArtistSuggestion,
     updateArtistSuggestion,
@@ -164,6 +165,43 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
               </Label>
             </FieldContent>
           </Field>
+
+          {/* Notification Subscription - Optional */}
+          <Field orientation="horizontal">
+            <FieldContent>
+              <Checkbox
+                id="wantNotification"
+                checked={formState.wantNotification}
+                onCheckedChange={toggleNotification}
+              />
+              <Label htmlFor="wantNotification" className="cursor-pointer font-normal text-sm">
+                You want to be notified if there is a new entry to this card?
+              </Label>
+            </FieldContent>
+          </Field>
+
+          {/* Notification Email - Shown when checkbox is checked */}
+          {formState.wantNotification && (
+            <Field>
+              <FieldLabel>
+                <Label htmlFor="notificationEmail">Email Address *</Label>
+              </FieldLabel>
+              <FieldContent>
+                <Input
+                  id="notificationEmail"
+                  name="notificationEmail"
+                  type="email"
+                  value={formState.notificationEmail}
+                  onChange={handleInputChange}
+                  placeholder="Enter your email address"
+                  aria-invalid={!!getFieldError(formState.validation.errors, "notificationEmail")}
+                />
+                {getFieldError(formState.validation.errors, "notificationEmail") && (
+                  <FieldError>{getFieldError(formState.validation.errors, "notificationEmail")}</FieldError>
+                )}
+              </FieldContent>
+            </Field>
+          )}
         </FieldGroup>
 
         <div className="flex justify-end gap-2">
