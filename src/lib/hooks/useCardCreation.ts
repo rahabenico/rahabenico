@@ -54,7 +54,7 @@ export interface CardCreationState {
  * }
  * ```
  */
-export function useCardCreation() {
+export function useCardCreation(adminPassword: string | null) {
   const createCard = useMutation(api.cardEntries.createCard);
 
   const [formState, setFormState] = useState<CardCreationState>({
@@ -91,6 +91,15 @@ export function useCardCreation() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!adminPassword) {
+      setFormState((prev) => ({
+        ...prev,
+        error: "Please log in with admin password",
+        isSubmitting: false,
+      }));
+      return;
+    }
+
     const validationResult = validateCardForm(formState.customId, formState.task);
     setValidation(validationResult);
 
@@ -109,6 +118,7 @@ export function useCardCreation() {
       const result = await createCard({
         customId: formState.customId.trim(),
         task: formState.task.trim(),
+        adminPassword,
       });
 
       const editUrl = `https://www.rahabenico.de/card/${formState.customId.trim()}?key=${result.editKey}`;

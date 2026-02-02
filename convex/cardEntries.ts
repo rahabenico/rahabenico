@@ -86,12 +86,36 @@ export const getInterestedBuyersCount = query({
   },
 });
 
+export const validateAdminPassword = mutation({
+  args: {
+    password: v.string(),
+  },
+  // biome-ignore lint/correctness/noUnusedVariables: ctx is required by Convex mutation signature
+  handler: async (ctx, args) => {
+    // Validate admin password (stored in Convex environment variable)
+    // Set ADMIN_PASSWORD in Convex dashboard: Settings > Environment Variables
+    const correctPassword = process.env.ADMIN_PASSWORD || "admin123";
+    if (args.password !== correctPassword) {
+      throw new Error("Invalid password");
+    }
+    return { success: true };
+  },
+});
+
 export const createCard = mutation({
   args: {
     customId: v.string(),
     task: v.string(),
+    adminPassword: v.string(),
   },
   handler: async (ctx, args) => {
+    // Validate admin password (stored in Convex environment variable)
+    // Set ADMIN_PASSWORD in Convex dashboard: Settings > Environment Variables
+    const correctPassword = process.env.ADMIN_PASSWORD || "admin123";
+    if (args.adminPassword !== correctPassword) {
+      throw new Error("Unauthorized: Invalid admin password");
+    }
+
     // Check if card with this customId already exists
     const existing = await ctx.db
       .query("cards")
