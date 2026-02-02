@@ -2,6 +2,7 @@ import { useQuery } from "convex/react";
 import { useState } from "react";
 import RahabenicoLogo from "@/assets/rahabenico.svg";
 import { Heading } from "@/components/Heading";
+import { Header } from "@/components/header";
 import { Teaser } from "@/components/Teaser";
 import { LoadingBar } from "@/components/ui/spinner";
 import { api } from "../../convex/_generated/api";
@@ -16,6 +17,7 @@ function Home() {
   return (
     <>
       <LoadingBar isLoading={isLoading} />
+      <Header showSupportLink={true} showBackButton={false} />
       <div className="container mx-auto max-w-4xl space-y-12 px-4 pt-8 pb-18 md:pt-12 md:pb-24">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="flex items-center gap-6">

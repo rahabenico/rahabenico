@@ -153,7 +153,7 @@ If you no longer wish to receive these notifications, unsubscribe here: ${unsubs
             Messages: [
               {
                 From: {
-                  Email: process.env.MAILJET_FROM_EMAIL || "noreply@rahabenico.com",
+                  Email: process.env.MAILJET_FROM_EMAIL || "dance@rahabenico.com",
                   Name: "Rahabenico",
                 },
                 To: [
