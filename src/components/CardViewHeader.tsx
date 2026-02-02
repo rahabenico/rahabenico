@@ -21,10 +21,6 @@ export function Header({ showSupportLink = true }: HeaderProps) {
               Support us
             </Link>
           )}
-          <Link to="/contact" className="flex items-center gap-2 text-primary hover:text-primary/80">
-            <HugeiconsIcon icon={FavouriteCircleIcon} className="h-5 w-5" />
-            Contact
-          </Link>
         </div>
       </div>
     </div>

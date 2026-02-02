@@ -5,6 +5,7 @@ import { Footer } from "./components/Footer";
 import { convex } from "./lib/convex";
 import AdminView from "./views/AdminView";
 import CardView from "./views/CardView";
+import Contact from "./views/Contact";
 import Home from "./views/Home";
 import Support from "./views/Support";
 
@@ -17,6 +18,7 @@ export function App() {
           <Route path="/admin" element={<AdminView />} />
           <Route path="/card/:id" element={<CardView />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
         <Footer />
         <Chat />
