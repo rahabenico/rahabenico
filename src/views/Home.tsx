@@ -16,12 +16,12 @@ function Home() {
   return (
     <>
       <LoadingBar isLoading={isLoading} />
-      <div className="container mx-auto max-w-4xl space-y-12 px-4 py-8 md:py-12">
+      <div className="container mx-auto max-w-4xl space-y-12 px-4 pt-8 pb-18 md:pt-12 md:pb-24">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="flex items-center gap-6">
-            <div>
+            <div className="text-center">
               <Heading level={1} variant="main">
-                Welcome to <span className="text-[#7E20D1]">rahabenico</span>
+                Welcome to <span className="text-primary">rahabenico</span>
               </Heading>
               <Heading level={2}>
                 <span className="text-[#7E20D1]">Ra</span>ve <span className="text-[#7E20D1]">ha</span>rd.{" "}

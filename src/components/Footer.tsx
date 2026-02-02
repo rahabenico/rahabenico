@@ -10,7 +10,7 @@ export function Footer() {
             href="https://www.instagram.com/rahabenico?utm_source=qr&igsh=cjlvZXZlcnMzNXBh"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-primary underline underline-offset-4 hover:text-primary/80"
+            className="flex items-center gap-2 text-primary hover:text-primary/80"
           >
             <HugeiconsIcon icon={Instagram} className="h-5 w-5" />
             Follow us on Instagram

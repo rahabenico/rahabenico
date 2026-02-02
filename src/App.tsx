@@ -1,10 +1,11 @@
 import { ConvexProvider } from "convex/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { convex } from "./lib/convex";
 import { Footer } from "./components/Footer";
+import { convex } from "./lib/convex";
 import AdminView from "./views/AdminView";
 import CardView from "./views/CardView";
 import Home from "./views/Home";
+import Support from "./views/Support";
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminView />} />
           <Route path="/card/:id" element={<CardView />} />
+          <Route path="/support" element={<Support />} />
         </Routes>
         <Footer />
       </BrowserRouter>
