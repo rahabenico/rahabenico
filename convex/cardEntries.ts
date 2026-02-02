@@ -90,8 +90,7 @@ export const validateAdminPassword = mutation({
   args: {
     password: v.string(),
   },
-  // biome-ignore lint/correctness/noUnusedVariables: ctx is required by Convex mutation signature
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     // Validate admin password (stored in Convex environment variable)
     // Set ADMIN_PASSWORD in Convex dashboard: Settings > Environment Variables
     const correctPassword = process.env.ADMIN_PASSWORD || "admin123";
