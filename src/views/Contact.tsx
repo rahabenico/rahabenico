@@ -81,14 +81,14 @@ function Contact() {
                 <span className="text-[#7E20D1]">Be</span> <span className="text-[#7E20D1]">ni</span>ce.{" "}
                 <span className="text-[#7E20D1]">Co</span>nnect.
               </Heading>
-              <Heading level={1} variant="main">
-                Contact <span className="text-primary">rahabenico</span>
-              </Heading>
             </div>
           </div>
           <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
+          <Heading level={1} variant="main">
+            Contact <span className="text-primary">rahabenico</span>
+          </Heading>
 
-          <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
+          <form onSubmit={handleSubmit} className="mt-8 w-full max-w-md space-y-4 md:mt-12">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input

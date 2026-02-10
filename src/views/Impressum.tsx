@@ -29,39 +29,36 @@ function Impressum() {
               Contact & Legal Information
             </Heading>
             <div className="overflow-x-auto rounded-lg border border-border">
-              <table className="w-full border-collapse text-base">
+              <table className="w-full border-collapse text-sm">
                 <tbody>
                   <tr className="border-border border-b">
-                    <td className="p-4 font-medium text-muted-foreground">Company / Name</td>
-                    <td className="p-4">rahabenico GmbH</td>
+                    <td className="p-4 font-medium text-muted-foreground">Website</td>
+                    <td className="p-4">rahabenico</td>
+                  </tr>
+                  <tr className="border-border border-b">
+                    <td className="p-4 font-medium text-muted-foreground">Email</td>
+                    <td className="p-4">dance@rahabenico.de</td>
+                  </tr>
+                  <tr className="border-border border-b">
+                    <td className="p-4 font-medium text-muted-foreground">Verantwortlicher</td>
+                    <td className="p-4">Richard Hermann</td>
                   </tr>
                   <tr className="border-border border-b">
                     <td className="p-4 font-medium text-muted-foreground">Address</td>
                     <td className="p-4">
-                      Musterstraße 123
+                      Kurt-Eisner-Str. 87
                       <br />
-                      12345 Stadt
+                      04275 Leipzig
                     </td>
                   </tr>
+
                   <tr className="border-border border-b">
-                    <td className="p-4 font-medium text-muted-foreground">Email</td>
-                    <td className="p-4">contact@rahabenico.example</td>
+                    <td className="p-4 font-medium text-muted-foreground"></td>
+                    <td className="p-4">Kleinunternehmer nach §19 UStG</td>
                   </tr>
                   <tr className="border-border border-b">
-                    <td className="p-4 font-medium text-muted-foreground">Phone</td>
-                    <td className="p-4">+49 123 456789</td>
-                  </tr>
-                  <tr className="border-border border-b">
-                    <td className="p-4 font-medium text-muted-foreground">VAT ID</td>
-                    <td className="p-4">DE123456789</td>
-                  </tr>
-                  <tr className="border-border border-b">
-                    <td className="p-4 font-medium text-muted-foreground">Register Court</td>
-                    <td className="p-4">Amtsgericht Stadt, HRB 12345</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-medium text-muted-foreground">Managing Director</td>
-                    <td className="p-4">Max Mustermann</td>
+                    <td className="p-4 font-medium text-muted-foreground">Wirtschafts-ID</td>
+                    <td className="p-4">Coming soon</td>
                   </tr>
                 </tbody>
               </table>
@@ -72,7 +69,7 @@ function Impressum() {
             <Heading level={3} variant="section" className="mb-4">
               Additional Legal Information
             </Heading>
-            <div className="space-y-4 text-base leading-relaxed">
+            <div className="space-y-4 text-sm leading-relaxed">
               <p>
                 <strong>Disclaimer:</strong> The contents of our pages have been created with the utmost care. However,
                 we cannot guarantee the contents&apos; accuracy, completeness or topicality. According to statutory
