@@ -1,4 +1,4 @@
-import { File01Icon } from "@hugeicons/core-free-icons";
+import { File01Icon, PaintBoardIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useQuery } from "convex/react";
 import { useState } from "react";
@@ -47,6 +47,16 @@ function Home() {
             {cards ? cards.length : 0} cards in circulation
           </Heading>
 
+          <div className="flex justify-center">
+            <Link
+              to="/impressum"
+              className="flex items-center gap-2 text-md text-primary text-xs hover:text-primary/80 md:text-sm lg:text-base"
+            >
+              <HugeiconsIcon icon={PaintBoardIcon} className="size-4 lg:size-5" />
+              Artwork gallery
+            </Link>
+          </div>
+
           {!cards ? (
             <p className="text-muted-foreground">Loading cards...</p>
           ) : cards.length === 0 ? (
@@ -72,7 +82,7 @@ function Home() {
                   <button
                     type="button"
                     onClick={() => setShowAllCards(!showAllCards)}
-                    className="text-primary underline underline-offset-4 hover:text-primary/80"
+                    className="text-primary underline-offset-4 hover:text-primary/80"
                   >
                     {showAllCards ? "Show fewer cards" : "Show more cards"}
                   </button>
