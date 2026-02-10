@@ -1,5 +1,8 @@
+import { File01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useQuery } from "convex/react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import RahabenicoLogo from "@/assets/rahabenico.svg";
 import { Heading } from "@/components/Heading";
 import { Header } from "@/components/header";
@@ -19,7 +22,7 @@ function Home() {
       <LoadingBar isLoading={isLoading} />
       <Header showSupportLink={true} showBackButton={false} />
       <div className="container mx-auto max-w-4xl space-y-12 px-4 pt-8 pb-18 md:pt-12 md:pb-24">
-        <div className="flex flex-col items-center justify-center space-y-4">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="flex items-center gap-6">
             <div className="text-center">
               <Heading level={1} variant="main">
@@ -33,7 +36,11 @@ function Home() {
             </div>
           </div>
           <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
-          <p>Under construction</p>
+          <div className="flex max-w-xl flex-col gap-3 text-pretty text-center">
+            <p>We want to enhance the social atmosphere of Raves.</p>
+            <p>In a playful and appreciative way we connect nice people.</p>
+            <p className="mt-4 inline-block animate-dance text-primary">Keep on dancing!</p>
+          </div>
         </div>
         <div className="space-y-4 text-center">
           <Heading level={2} variant="section">
@@ -75,7 +82,7 @@ function Home() {
         </div>
         <div className="space-y-4 text-center">
           <Heading level={2} variant="section">
-            Top Artist Suggestions
+            Artist Suggestions
             {/* {artistSuggestions && artistSuggestions.length > 0 && `(${artistSuggestions.length})`} */}
           </Heading>
 
@@ -95,6 +102,15 @@ function Home() {
               ))}
             </div>
           )}
+        </div>
+        <div className="flex justify-center">
+          <Link
+            to="/impressum"
+            className="flex items-center gap-2 text-md text-primary text-xs hover:text-primary/80 md:text-sm lg:text-base"
+          >
+            <HugeiconsIcon icon={File01Icon} className="size-4 lg:size-5" />
+            Impressum
+          </Link>
         </div>
       </div>
     </>

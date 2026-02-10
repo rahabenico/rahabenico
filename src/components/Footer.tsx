@@ -1,6 +1,5 @@
-import { File01Icon, Instagram } from "@hugeicons/core-free-icons";
+import { Instagram } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Link } from "react-router-dom";
 import { Chat } from "./Chat";
 
 export function Footer() {
@@ -16,14 +15,6 @@ export function Footer() {
           <HugeiconsIcon icon={Instagram} className="size-4 lg:size-5" />
           Follow us on Instagram
         </a>
-        <Link
-          to="/impressum"
-          className="flex items-center gap-2 text-md text-primary text-xs hover:text-primary/80 md:text-sm lg:text-base"
-        >
-          <HugeiconsIcon icon={File01Icon} className="size-4 lg:size-5" />
-          Impressum
-        </Link>
-
         <Chat />
       </div>
     </footer>

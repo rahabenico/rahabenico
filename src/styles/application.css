@@ -132,3 +132,24 @@
     @apply font-sans;
     }
 }
+
+@keyframes dance {
+  0%, 100% {
+    transform: scale(1) rotate(0deg) skewY(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg) skewY(15deg);
+  }
+  50% {
+    transform: scale(1.5) rotate(0deg) skewY(0deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg) skewY(-15deg);
+  }
+}
+
+.animate-dance {
+  animation: dance 1.25s ease-in-out infinite;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}

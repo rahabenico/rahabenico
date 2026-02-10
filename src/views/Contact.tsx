@@ -71,7 +71,7 @@ function Contact() {
 
   return (
     <>
-      <Header showSupportLink={false} />
+      <Header showSupportLink={false} showContactLink={false} />
       <div className="container mx-auto max-w-4xl space-y-12 px-4 pt-8 pb-18 md:pt-12 md:pb-24">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="flex items-center gap-6">
