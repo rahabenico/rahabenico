@@ -11,11 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "../../convex/_generated/api";
 
 const SUBJECT_OPTIONS = [
-  "Report troublesome comment",
-  "Interest in buying cards",
-  "Ideas and suggestions",
-  "My NFC chip is not working anymore",
   "Contact our artists",
+  "Ideas and suggestions",
+  "Donation reward: My contact info",
+  "My NFC chip is not working anymore",
+  "Report troublesome comment",
   "other",
 ] as const;
 
