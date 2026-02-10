@@ -6,6 +6,8 @@ export default defineSchema({
     customId: v.string(),
     task: v.string(),
     editKey: v.string(),
+    frontImageId: v.optional(v.id("_storage")),
+    backImageId: v.optional(v.id("_storage")),
   }).index("by_customId", ["customId"]),
 
   cardEntries: defineTable({

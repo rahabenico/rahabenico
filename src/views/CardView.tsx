@@ -47,7 +47,26 @@ function CardView() {
       <div className="container mx-auto flex max-w-4xl flex-col gap-6 p-6 md:gap-8 md:p-12">
         <div className="flex flex-col gap-1 text-center">
           <h1 className="mb-2 font-bold font-headline text-3xl">{id}</h1>
-          <p className="text-md">"{card.task}"</p>
+          {card.frontImageUrl || card.backImageUrl ? (
+            <div className="mt-6 flex w-full items-center gap-4">
+              {card.frontImageUrl && (
+                <img
+                  src={card.frontImageUrl}
+                  alt={`Front of card ${id}`}
+                  className="h-auto w-1/2 max-w-full flex-1 rounded-lg"
+                />
+              )}
+              {card.backImageUrl && (
+                <img
+                  src={card.backImageUrl}
+                  alt={`Back of card ${id}`}
+                  className="h-auto w-1/2 max-w-full flex-1 rounded-lg"
+                />
+              )}
+            </div>
+          ) : (
+            <p className="text-md">"{card.task}"</p>
+          )}
         </div>
 
         <div className="mb-8 space-y-4 text-center">

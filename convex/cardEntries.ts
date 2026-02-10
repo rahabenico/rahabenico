@@ -9,7 +9,20 @@ export const getCardByCustomId = query({
       .query("cards")
       .withIndex("by_customId", (q) => q.eq("customId", args.customId))
       .first();
-    return card;
+    
+    if (!card) {
+      return null;
+    }
+
+    // Fetch URLs for front and back images if they exist
+    const frontImageUrl = card.frontImageId ? await ctx.storage.getUrl(card.frontImageId) : null;
+    const backImageUrl = card.backImageId ? await ctx.storage.getUrl(card.backImageId) : null;
+
+    return {
+      ...card,
+      frontImageUrl,
+      backImageUrl,
+    };
   },
 });
 
