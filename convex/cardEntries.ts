@@ -29,7 +29,22 @@ export const getCardByCustomId = query({
 export const getAllCards = query({
   handler: async (ctx) => {
     const cards = await ctx.db.query("cards").order("desc").collect();
-    return cards;
+    
+    // Fetch URLs for front and back images if they exist
+    const cardsWithUrls = await Promise.all(
+      cards.map(async (card) => {
+        const frontImageUrl = card.frontImageId ? await ctx.storage.getUrl(card.frontImageId) : null;
+        const backImageUrl = card.backImageId ? await ctx.storage.getUrl(card.backImageId) : null;
+        
+        return {
+          ...card,
+          frontImageUrl,
+          backImageUrl,
+        };
+      })
+    );
+    
+    return cardsWithUrls;
   },
 });
 

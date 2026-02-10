@@ -61,7 +61,8 @@ function Home() {
                       href={`/card/${card.customId}`}
                       title={card.customId}
                       subtitle={card.task}
-                      className="lg:aspect-10/4"
+                      frontImageUrl={card.frontImageUrl}
+                      backImageUrl={card.backImageUrl}
                     />
                   )
                 )}
