@@ -5,6 +5,7 @@ import { convex } from "./lib/convex";
 import AdminView from "./views/AdminView";
 import CardView from "./views/CardView";
 import Contact from "./views/Contact";
+import Gallery from "./views/Gallery";
 import Home from "./views/Home";
 import Impressum from "./views/Impressum";
 import Support from "./views/Support";
@@ -20,6 +21,7 @@ export function App() {
           <Route path="/card/:id" element={<CardView />} />
           <Route path="/support" element={<Support />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
         </Routes>

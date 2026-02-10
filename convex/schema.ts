@@ -55,4 +55,14 @@ export default defineSchema({
   })
     .index("by_cardId", ["cardId"])
     .index("by_cardId_email", ["cardId", "email"]),
+
+  galleryImages: defineTable({
+    storageId: v.id("_storage"), // Reference to Convex file storage
+    title: v.optional(v.string()),
+    description: v.optional(v.string()),
+    uploadedAt: v.number(),
+    order: v.optional(v.number()), // For custom ordering
+  })
+    .index("by_uploadedAt", ["uploadedAt"])
+    .index("by_order", ["order"]),
 });

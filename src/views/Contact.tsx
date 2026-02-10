@@ -13,7 +13,9 @@ import { api } from "../../convex/_generated/api";
 const SUBJECT_OPTIONS = [
   "Report troublesome comment",
   "Interest in buying cards",
-  "Idea and suggestions",
+  "Ideas and suggestions",
+  "My NFC chip is not working anymore",
+  "Contact our artists",
   "other",
 ] as const;
 
