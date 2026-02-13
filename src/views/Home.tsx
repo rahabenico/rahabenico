@@ -49,7 +49,7 @@ function Home() {
 
           <div className="flex justify-center">
             <Link
-              to="/impressum"
+              to="/gallery"
               className="flex items-center gap-2 text-md text-primary text-xs hover:text-primary/80 md:text-sm lg:text-base"
             >
               <HugeiconsIcon icon={PaintBoardIcon} className="size-4 lg:size-5" />
