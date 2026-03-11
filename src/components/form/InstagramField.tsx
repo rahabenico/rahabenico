@@ -46,7 +46,7 @@ export function InstagramField({ value, onChange, isVisible, onToggle }: Instagr
           id="instagram"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Enter your Instagram handle (e.g. @username)"
+          placeholder="Enter your handle"
         />
       </FieldContent>
     </Field>
