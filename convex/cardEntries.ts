@@ -67,17 +67,25 @@ export const getAllArtistSuggestions = query({
     const allSuggestions = await ctx.db.query("artistSuggestions").collect();
 
     // Group by name and sum counts (handle undefined count for migration)
-    const artistMap = new Map<string, number>();
+    // Also track spotifyId (use the first non-empty one found)
+    const artistMap = new Map<string, { count: number; spotifyId?: string }>();
 
     for (const suggestion of allSuggestions) {
-      const currentCount = artistMap.get(suggestion.name) || 0;
+      const current = artistMap.get(suggestion.name) || { count: 0 };
       const suggestionCount = suggestion.count ?? 1; // Default to 1 for existing records without count
-      artistMap.set(suggestion.name, currentCount + suggestionCount);
+      
+      // Use spotifyId from this suggestion if we don't have one yet, or if this one is non-empty
+      const spotifyId = current.spotifyId || suggestion.spotifyId;
+      
+      artistMap.set(suggestion.name, {
+        count: current.count + suggestionCount,
+        spotifyId: spotifyId,
+      });
     }
 
     // Convert to array and sort by count descending
     const sortedArtists = Array.from(artistMap.entries())
-      .map(([name, count]) => ({ name, count }))
+      .map(([name, data]) => ({ name, count: data.count, spotifyId: data.spotifyId }))
       .sort((a, b) => b.count - a.count);
 
     return sortedArtists;

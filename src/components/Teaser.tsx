@@ -5,14 +5,15 @@ interface TeaserProps {
   subtitle?: string;
   badge?: string | number;
   href?: string;
+  onClick?: () => void;
   className?: string;
   frontImageUrl?: string | null;
   backImageUrl?: string | null;
 }
 
-export function Teaser({ title, subtitle, badge, href, className = "", frontImageUrl, backImageUrl }: TeaserProps) {
+export function Teaser({ title, subtitle, badge, href, onClick, className = "", frontImageUrl, backImageUrl }: TeaserProps) {
   const content = (
-    <div className="group flex h-full flex-col rounded-lg border bg-card px-5 pt-3 pb-4 text-center transition-colors hover:bg-accent/50">
+    <div className={`group flex h-full flex-col rounded-lg border bg-card px-5 pt-3 pb-4 text-center transition-colors hover:bg-accent/50 ${onClick && !href ? 'cursor-pointer' : ''}`}>
       <h3 className="font-medium text-md group-hover:text-primary">{title}</h3>
       {(frontImageUrl || backImageUrl) && (
         <div className="mt-3 flex justify-center gap-2">
@@ -46,6 +47,14 @@ export function Teaser({ title, subtitle, badge, href, className = "", frontImag
       <Link to={href} className={`block h-full ${className}`}>
         {content}
       </Link>
+    );
+  }
+
+  if (onClick) {
+    return (
+      <div className={`h-full ${className}`} onClick={onClick}>
+        {content}
+      </div>
     );
   }
 

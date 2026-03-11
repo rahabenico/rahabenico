@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 import RahabenicoLogo from "@/assets/rahabenico.svg";
 import { Heading } from "@/components/Heading";
 import { Header } from "@/components/header";
+import { SpotifyModal } from "@/components/SpotifyModal";
 import { Teaser } from "@/components/Teaser";
 import { LoadingBar } from "@/components/ui/spinner";
 import { api } from "../../convex/_generated/api";
 
 function Home() {
   const [showAllCards, setShowAllCards] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState<{ name: string; spotifyId: string } | null>(null);
   const cards = useQuery(api.cardEntries.getAllCards);
   const artistSuggestions = useQuery(api.cardEntries.getAllArtistSuggestions);
 
@@ -115,16 +117,35 @@ function Home() {
           ) : artistSuggestions.length === 0 ? (
             <p className="text-muted-foreground">No artist suggestions yet. Be the first to suggest one!</p>
           ) : (
-            <div className="flex flex-col gap-2">
-              {artistSuggestions.map((artist, index) => (
-                <Teaser
-                  key={artist.name}
-                  title={artist.name}
-                  badge={`${artist.count} ${artist.count === 1 ? "suggestion" : "suggestions"}`}
-                  subtitle={`#${index + 1} most suggested`}
+            <>
+              <div className="flex flex-col gap-2">
+                {artistSuggestions.map((artist, index) => (
+                  <Teaser
+                    key={artist.name}
+                    title={artist.name}
+                    badge={`${artist.count} ${artist.count === 1 ? "suggestion" : "suggestions"}`}
+                    subtitle={`#${index + 1} most suggested`}
+                    onClick={() => {
+                      if (artist.spotifyId) {
+                        setSelectedArtist({ name: artist.name, spotifyId: artist.spotifyId });
+                      }
+                    }}
+                  />
+                ))}
+              </div>
+              {selectedArtist && (
+                <SpotifyModal
+                  open={!!selectedArtist}
+                  onOpenChange={(open) => {
+                    if (!open) {
+                      setSelectedArtist(null);
+                    }
+                  }}
+                  artistName={selectedArtist.name}
+                  spotifyId={selectedArtist.spotifyId}
                 />
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
         <div className="flex justify-center">

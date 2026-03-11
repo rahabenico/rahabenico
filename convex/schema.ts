@@ -35,6 +35,7 @@ export default defineSchema({
     name: v.string(),
     count: v.optional(v.number()),
     cardEntryId: v.id("cardEntries"),
+    spotifyId: v.optional(v.string()), // Spotify artist ID for embedding
   })
     .index("by_cardEntryId", ["cardEntryId"])
     .index("by_name", ["name"]),
