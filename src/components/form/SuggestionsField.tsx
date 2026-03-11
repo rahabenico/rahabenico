@@ -59,7 +59,7 @@ export function SuggestionsField({
 }: SuggestionsFieldProps) {
   if (!isVisible) {
     return (
-      <button type="button" onClick={onToggle} className="text-primary text-sm hover:underline">
+      <button type="button" onClick={onToggle} className="text-purple-500 text-sm hover:underline">
         Add {title.toLowerCase()}
       </button>
     );
@@ -98,7 +98,7 @@ export function SuggestionsField({
             </div>
           ))}
           {suggestions.length < 3 && (
-            <Button type="button" variant="outline" onClick={onAdd} className="w-full">
+            <Button type="button" variant="purple" onClick={onAdd} className="w-full">
               <HugeiconsIcon icon={PlusSignIcon} className="mr-2 h-4 w-4" />
               Add {title.toLowerCase()}
             </Button>

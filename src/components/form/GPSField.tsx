@@ -40,7 +40,7 @@ export function GPSField({ position, city, onGetGPS, isLoading, disabled }: GPSF
       </FieldLabel>
       <FieldContent>
         <div className="flex items-center gap-2">
-          <Button type="button" variant="outline" onClick={onGetGPS} disabled={disabled || !!position || isLoading}>
+          <Button type="button" variant="default" onClick={onGetGPS} disabled={disabled || !!position || isLoading}>
             <HugeiconsIcon icon={LocationIcon} className="mr-2 h-4 w-4" />
             {isLoading ? "Getting location..." : position ? "Location set" : "Add my GPS position"}
           </Button>

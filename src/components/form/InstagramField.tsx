@@ -30,7 +30,7 @@ interface InstagramFieldProps {
 export function InstagramField({ value, onChange, isVisible, onToggle }: InstagramFieldProps) {
   if (!isVisible) {
     return (
-      <button type="button" onClick={onToggle} className="text-primary text-sm hover:underline">
+      <button type="button" onClick={onToggle} className="text-purple-500 text-sm hover:underline">
         Add Instagram handle
       </button>
     );

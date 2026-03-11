@@ -31,7 +31,7 @@ interface CommentFieldProps {
 export function CommentField({ value, onChange, isVisible, onToggle }: CommentFieldProps) {
   if (!isVisible) {
     return (
-      <button type="button" onClick={onToggle} className="text-primary text-sm hover:underline">
+      <button type="button" onClick={onToggle} className="text-purple-500 text-sm hover:underline">
         Add comment
       </button>
     );
