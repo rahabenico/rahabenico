@@ -38,8 +38,11 @@ function Home() {
       <LoadingBar isLoading={isLoading} />
       <Header showSupportLink={true} showBackButton={false} />
       <div className="container mx-auto max-w-4xl space-y-12 px-4 pt-8 pb-18 md:pt-12 md:pb-24">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-center">
-          <div className="flex flex-col space-y-4 text-left">
+        <div className="flex flex-col items-center gap-6">
+          <div className="flex justify-center">
+            <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
+          </div>
+          <div className="flex flex-col space-y-4 text-center">
             <div>
               <Heading level={1} variant="main">
                 Welcome to <span className="text-primary">rahabenico</span>
@@ -55,9 +58,6 @@ function Home() {
               <p>In a playful and appreciative way we connect nice people.</p>
               <p className="mt-4 inline-block animate-dance text-primary">Keep on dancing!</p>
             </div>
-          </div>
-          <div className="flex justify-center md:justify-end">
-            <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
           </div>
         </div>
         <div className="space-y-4 text-center">
@@ -82,7 +82,7 @@ function Home() {
           ) : (
             <>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {(showAllCards ? sortedCards : sortedCards.slice(0, 5)).map((card) => (
+                {(showAllCards ? sortedCards : sortedCards.slice(0, 3)).map((card) => (
                   <Teaser
                     key={card._id}
                     href={`/card/${card.customId}`}
