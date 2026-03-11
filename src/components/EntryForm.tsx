@@ -146,22 +146,6 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
             isTextarea
           />
 
-          {/* Interested in Buying - Optional */}
-          <Field orientation="horizontal">
-            <FieldContent>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="interestedInBuying"
-                  checked={formState.interestedInBuying}
-                  onCheckedChange={(checked) => handleFieldChange("interestedInBuying", checked)}
-                />
-                <Label htmlFor="interestedInBuying" className="cursor-pointer font-normal text-sm">
-                  Would you be interested in buying your own set of cards in the future?
-                </Label>
-              </div>
-            </FieldContent>
-          </Field>
-
           {/* Notification Subscription - Optional */}
           <Field orientation="horizontal">
             <FieldContent>
@@ -200,6 +184,22 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
               </FieldContent>
             </Field>
           )}
+
+          {/* Interested in Buying - Optional */}
+          <Field orientation="horizontal">
+            <FieldContent>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="interestedInBuying"
+                  checked={formState.interestedInBuying}
+                  onCheckedChange={(checked) => handleFieldChange("interestedInBuying", checked)}
+                />
+                <Label htmlFor="interestedInBuying" className="cursor-pointer font-normal text-sm">
+                  Would you be interested in buying your own set of cards in the future?
+                </Label>
+              </div>
+            </FieldContent>
+          </Field>
         </FieldGroup>
 
         <div className="sticky right-0 bottom-0 left-0 z-10 border-border border-t bg-background p-4">
