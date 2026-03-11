@@ -1,4 +1,5 @@
 import { useQuery } from "convex/react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import RahabenicoLogo from "@/assets/rahabenico.svg";
 import { Heading } from "@/components/Heading";
 import { Header } from "@/components/header";
@@ -7,8 +8,36 @@ import { api } from "../../convex/_generated/api";
 
 function Gallery() {
   const galleryImages = useQuery(api.gallery.getGalleryImages);
+  const [shuffleSeed, setShuffleSeed] = useState(() => Math.random());
 
-  const isLoading = galleryImages === undefined;
+  // Update shuffle seed when galleryImages loads/changes
+  useEffect(() => {
+    if (galleryImages) {
+      startTransition(() => {
+        setShuffleSeed(Math.random());
+      });
+    }
+  }, [galleryImages]);
+
+  // Shuffle images randomly when they load using seeded random
+  const shuffledImages = useMemo(() => {
+    if (!galleryImages) return undefined;
+    const shuffled = [...galleryImages];
+    let seed = shuffleSeed;
+    // Seeded random function (linear congruential generator)
+    const random = () => {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+    // Fisher-Yates shuffle algorithm with seeded random
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, [galleryImages, shuffleSeed]);
+
+  const isLoading = shuffledImages === undefined;
 
   return (
     <>
@@ -35,13 +64,13 @@ function Gallery() {
           <div className="flex justify-center py-12">
             <p className="text-muted-foreground">Loading gallery...</p>
           </div>
-        ) : !galleryImages || galleryImages.length === 0 ? (
+        ) : !shuffledImages || shuffledImages.length === 0 ? (
           <div className="flex justify-center py-12">
             <p className="text-muted-foreground">No images in the gallery yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {galleryImages.map((image) =>
+            {shuffledImages.map((image) =>
               image.url || image.description ? (
                 <div key={image._id} className="group overflow-hidden rounded-lg">
                   {image.url ? (
