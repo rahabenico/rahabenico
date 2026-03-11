@@ -38,9 +38,9 @@ function Home() {
       <LoadingBar isLoading={isLoading} />
       <Header showSupportLink={true} showBackButton={false} />
       <div className="container mx-auto max-w-4xl space-y-12 px-4 pt-8 pb-18 md:pt-12 md:pb-24">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="flex items-center gap-6">
-            <div className="text-center">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-center">
+          <div className="flex flex-col space-y-4 text-left">
+            <div>
               <Heading level={1} variant="main">
                 Welcome to <span className="text-primary">rahabenico</span>
               </Heading>
@@ -50,12 +50,14 @@ function Home() {
                 <span className="text-[#7E20D1]">Co</span>nnect.
               </Heading>
             </div>
+            <div className="flex max-w-xl flex-col gap-3 text-pretty">
+              <p>We want to enhance the social atmosphere of Raves.</p>
+              <p>In a playful and appreciative way we connect nice people.</p>
+              <p className="mt-4 inline-block animate-dance text-primary">Keep on dancing!</p>
+            </div>
           </div>
-          <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
-          <div className="flex max-w-xl flex-col gap-3 text-pretty text-center">
-            <p>We want to enhance the social atmosphere of Raves.</p>
-            <p>In a playful and appreciative way we connect nice people.</p>
-            <p className="mt-4 inline-block animate-dance text-primary">Keep on dancing!</p>
+          <div className="flex justify-center md:justify-end">
+            <img src={RahabenicoLogo} alt="Rahabenico Logo" className="size-14" />
           </div>
         </div>
         <div className="space-y-4 text-center">
@@ -119,19 +121,26 @@ function Home() {
           ) : (
             <>
               <div className="flex flex-col gap-2">
-                {artistSuggestions.map((artist, index) => (
-                  <Teaser
-                    key={artist.name}
-                    title={artist.name}
-                    badge={`${artist.count} ${artist.count === 1 ? "suggestion" : "suggestions"}`}
-                    subtitle={`#${index + 1} most suggested`}
-                    onClick={() => {
-                      if (artist.spotifyId) {
-                        setSelectedArtist({ name: artist.name, spotifyId: artist.spotifyId });
-                      }
-                    }}
-                  />
-                ))}
+                {artistSuggestions.map((artist, index) => {
+                  // Debug: log artist data to console
+                  if (artist.name.toLowerCase().includes("schrotthagen")) {
+                    console.log("Artist data:", artist);
+                  }
+                  return (
+                    <Teaser
+                      key={artist.name}
+                      title={artist.name}
+                      badge={`${artist.count} ${artist.count === 1 ? "suggestion" : "suggestions"}`}
+                      subtitle={`#${index + 1} most suggested`}
+                      spotifyId={artist.spotifyId}
+                      onClick={() => {
+                        if (artist.spotifyId) {
+                          setSelectedArtist({ name: artist.name, spotifyId: artist.spotifyId });
+                        }
+                      }}
+                    />
+                  );
+                })}
               </div>
               {selectedArtist && (
                 <SpotifyModal

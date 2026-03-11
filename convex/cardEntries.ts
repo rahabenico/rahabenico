@@ -66,26 +66,44 @@ export const getAllArtistSuggestions = query({
   handler: async (ctx) => {
     const allSuggestions = await ctx.db.query("artistSuggestions").collect();
 
-    // Group by name and sum counts (handle undefined count for migration)
+    // Group by name (case-insensitive) and sum counts (handle undefined count for migration)
     // Also track spotifyId (use the first non-empty one found)
-    const artistMap = new Map<string, { count: number; spotifyId?: string }>();
+    const artistMap = new Map<string, { count: number; spotifyId?: string; displayName: string }>();
 
     for (const suggestion of allSuggestions) {
-      const current = artistMap.get(suggestion.name) || { count: 0 };
+      // Use lowercase for grouping to handle case-insensitive matching
+      const normalizedName = suggestion.name.toLowerCase();
+      const current = artistMap.get(normalizedName);
       const suggestionCount = suggestion.count ?? 1; // Default to 1 for existing records without count
       
-      // Use spotifyId from this suggestion if we don't have one yet, or if this one is non-empty
-      const spotifyId = current.spotifyId || suggestion.spotifyId;
+      // Determine the spotifyId - prefer existing one if it's valid, otherwise use this suggestion's if valid
+      let spotifyId: string | undefined = undefined;
+      if (current?.spotifyId?.trim()) {
+        spotifyId = current.spotifyId;
+      } else if (suggestion.spotifyId?.trim()) {
+        spotifyId = suggestion.spotifyId;
+      }
       
-      artistMap.set(suggestion.name, {
-        count: current.count + suggestionCount,
-        spotifyId: spotifyId,
-      });
+      if (current) {
+        // Update existing entry
+        artistMap.set(normalizedName, {
+          count: current.count + suggestionCount,
+          spotifyId: spotifyId,
+          displayName: current.displayName, // Keep the first display name we encountered
+        });
+      } else {
+        // Create new entry
+        artistMap.set(normalizedName, {
+          count: suggestionCount,
+          spotifyId: spotifyId,
+          displayName: suggestion.name,
+        });
+      }
     }
 
     // Convert to array and sort by count descending
-    const sortedArtists = Array.from(artistMap.entries())
-      .map(([name, data]) => ({ name, count: data.count, spotifyId: data.spotifyId }))
+    const sortedArtists = Array.from(artistMap.values())
+      .map((data) => ({ name: data.displayName, count: data.count, spotifyId: data.spotifyId }))
       .sort((a, b) => b.count - a.count);
 
     return sortedArtists;

@@ -62,3 +62,193 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Crazy fun Spotify logo hover animations */
+@keyframes spotify-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.15);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.15);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes spotify-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px #1DB954) drop-shadow(0 0 16px #1DB954) drop-shadow(0 0 24px rgba(29, 185, 84, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px #1DB954) drop-shadow(0 0 32px #1DB954) drop-shadow(0 0 48px rgba(29, 185, 84, 0.8));
+  }
+}
+
+@keyframes spotify-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  75% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes spotify-sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(360deg);
+  }
+}
+
+@keyframes spotify-color-pulse {
+  0%, 100% {
+    color: #1DB954;
+  }
+  25% {
+    color: #1ed760;
+  }
+  50% {
+    color: #1DB954;
+  }
+  75% {
+    color: #1ed760;
+  }
+}
+
+.spotify-icon-container {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.spotify-icon-container::before,
+.spotify-icon-container::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #1DB954 0%, rgba(29, 185, 84, 0.3) 50%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10;
+}
+
+.spotify-icon-container::before {
+  top: -15px;
+  left: 15%;
+  animation: spotify-sparkle 1.2s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.spotify-icon-container::after {
+  bottom: -15px;
+  right: 15%;
+  animation: spotify-sparkle 1.2s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+
+/* Additional sparkle elements using box-shadow trick */
+.spotify-icon-container svg {
+  position: relative;
+  z-index: 1;
+}
+
+.group:hover .spotify-icon-container {
+  animation: spotify-spin 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-origin: center;
+}
+
+.group:hover .spotify-icon-container svg {
+  animation: spotify-glow 0.8s ease-in-out infinite, spotify-color-pulse 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px #1DB954) drop-shadow(0 0 24px rgba(29, 185, 84, 0.6));
+}
+
+.group:hover .spotify-icon-container::before,
+.group:hover .spotify-icon-container::after {
+  opacity: 1;
+}
+
+/* Create multiple sparkles using a wrapper */
+.spotify-sparkles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spotify-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #1DB954 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.group:hover .spotify-sparkle:nth-child(1) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.group:hover .spotify-sparkle:nth-child(2) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 20%;
+  right: 15%;
+  animation-delay: 0.2s;
+}
+
+.group:hover .spotify-sparkle:nth-child(3) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  bottom: 15%;
+  left: 25%;
+  animation-delay: 0.4s;
+}
+
+.group:hover .spotify-sparkle:nth-child(4) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  bottom: 10%;
+  right: 20%;
+  animation-delay: 0.6s;
+}
+
+.group:hover .spotify-sparkle:nth-child(5) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 50%;
+  left: 5%;
+  animation-delay: 0.3s;
+}
+
+.group:hover .spotify-sparkle:nth-child(6) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 50%;
+  right: 5%;
+  animation-delay: 0.5s;
+}

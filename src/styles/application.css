@@ -153,3 +153,206 @@
   perspective: 1000px;
   transform-style: preserve-3d;
 }
+
+/* Crazy fun Spotify logo hover animations */
+@keyframes spotify-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.2);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.3);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes spotify-spin-continuous {
+  0% {
+    transform: rotate(0deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.1);
+  }
+}
+
+@keyframes spotify-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px #1DB954) drop-shadow(0 0 16px #1DB954) drop-shadow(0 0 24px rgba(29, 185, 84, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px #1DB954) drop-shadow(0 0 32px #1DB954) drop-shadow(0 0 48px rgba(29, 185, 84, 0.8));
+  }
+}
+
+@keyframes spotify-sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg) translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2) rotate(120deg) translateY(-10px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1) rotate(240deg) translateY(-20px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(360deg) translateY(-30px);
+  }
+}
+
+@keyframes spotify-color-pulse {
+  0%, 100% {
+    color: #1DB954;
+  }
+  25% {
+    color: #1ed760;
+  }
+  50% {
+    color: #1DB954;
+  }
+  75% {
+    color: #1ed760;
+  }
+}
+
+.spotify-icon-container {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.spotify-icon-container::before,
+.spotify-icon-container::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #1DB954 0%, rgba(29, 185, 84, 0.3) 50%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10;
+}
+
+.spotify-icon-container::before {
+  top: -15px;
+  left: 15%;
+  animation: spotify-sparkle 1.2s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.spotify-icon-container::after {
+  bottom: -15px;
+  right: 15%;
+  animation: spotify-sparkle 1.2s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+
+.spotify-icon-container svg {
+  position: relative;
+  z-index: 1;
+}
+
+.group:hover .spotify-icon-container,
+.spotify-icon-container:hover {
+  animation: spotify-spin 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), spotify-spin-continuous 2s linear infinite 0.6s;
+  transform-origin: center;
+}
+
+.group:hover .spotify-icon-container svg,
+.spotify-icon-container:hover svg {
+  animation: spotify-glow 0.8s ease-in-out infinite, spotify-color-pulse 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px #1DB954) drop-shadow(0 0 24px rgba(29, 185, 84, 0.6));
+}
+
+.group:hover .spotify-icon-container::before,
+.group:hover .spotify-icon-container::after,
+.spotify-icon-container:hover::before,
+.spotify-icon-container:hover::after {
+  opacity: 1;
+}
+
+.spotify-sparkles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spotify-sparkle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #1DB954 0%, rgba(29, 185, 84, 0.8) 40%, rgba(29, 185, 84, 0.3) 70%, transparent 100%);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 8px #1DB954;
+}
+
+.group:hover .spotify-icon-container .spotify-sparkle:nth-child(1),
+.spotify-icon-container:hover .spotify-sparkle:nth-child(1) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+  opacity: 1;
+}
+
+.group:hover .spotify-icon-container .spotify-sparkle:nth-child(2),
+.spotify-icon-container:hover .spotify-sparkle:nth-child(2) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 20%;
+  right: 15%;
+  animation-delay: 0.2s;
+  opacity: 1;
+}
+
+.group:hover .spotify-icon-container .spotify-sparkle:nth-child(3),
+.spotify-icon-container:hover .spotify-sparkle:nth-child(3) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  bottom: 15%;
+  left: 25%;
+  animation-delay: 0.4s;
+  opacity: 1;
+}
+
+.group:hover .spotify-icon-container .spotify-sparkle:nth-child(4),
+.spotify-icon-container:hover .spotify-sparkle:nth-child(4) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  bottom: 10%;
+  right: 20%;
+  animation-delay: 0.6s;
+  opacity: 1;
+}
+
+.group:hover .spotify-icon-container .spotify-sparkle:nth-child(5),
+.spotify-icon-container:hover .spotify-sparkle:nth-child(5) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 50%;
+  left: 5%;
+  animation-delay: 0.3s;
+  opacity: 1;
+}
+
+.group:hover .spotify-icon-container .spotify-sparkle:nth-child(6),
+.spotify-icon-container:hover .spotify-sparkle:nth-child(6) {
+  animation: spotify-sparkle 1s ease-out infinite;
+  top: 50%;
+  right: 5%;
+  animation-delay: 0.5s;
+  opacity: 1;
+}
