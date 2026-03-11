@@ -91,8 +91,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
             isLoading={gpsLoading}
             disabled={formState.isSubmitting}
           />
-
-          {/* Location - Optional */}
+          {/* 
           <Field>
             <FieldLabel>
               <Label htmlFor="location">Location</Label>
@@ -106,7 +105,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
                 placeholder="Enter location description"
               />
             </FieldContent>
-          </Field>
+          </Field> */}
 
           {/* Comment - Optional */}
           <CommentField
