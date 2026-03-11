@@ -1,7 +1,7 @@
 import { File01Icon, PaintBoardIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useQuery } from "convex/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import RahabenicoLogo from "@/assets/rahabenico.svg";
 import { Heading } from "@/components/Heading";
@@ -14,6 +14,20 @@ function Home() {
   const [showAllCards, setShowAllCards] = useState(false);
   const cards = useQuery(api.cardEntries.getAllCards);
   const artistSuggestions = useQuery(api.cardEntries.getAllArtistSuggestions);
+
+  // Sort cards by entryCount (high to low), but always put "Kiwi-schnippelt-Rettich" last
+  const sortedCards = useMemo(() => {
+    if (!cards) return null;
+    const dummyCardId = "Kiwi-schnippelt-Rettich";
+    const regularCards = cards.filter((card) => card.customId !== dummyCardId);
+    const dummyCard = cards.find((card) => card.customId === dummyCardId);
+
+    // Sort regular cards by entryCount (high to low)
+    const sortedRegularCards = [...regularCards].sort((a, b) => (b.entryCount || 0) - (a.entryCount || 0));
+
+    // Always put dummy card at the end
+    return dummyCard ? [...sortedRegularCards, dummyCard] : sortedRegularCards;
+  }, [cards]);
 
   const isLoading = !cards || !artistSuggestions;
 
@@ -57,27 +71,26 @@ function Home() {
             </Link>
           </div>
 
-          {!cards ? (
+          {!sortedCards ? (
             <p className="text-muted-foreground">Loading cards...</p>
-          ) : cards.length === 0 ? (
+          ) : sortedCards.length === 0 ? (
             <p className="text-muted-foreground">No cards available yet.</p>
           ) : (
             <>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {(showAllCards ? cards.slice(-5).concat(cards.slice(0, cards.length - 5)) : cards.slice(-5)).map(
-                  (card) => (
-                    <Teaser
-                      key={card._id}
-                      href={`/card/${card.customId}`}
-                      title={card.customId}
-                      subtitle={card.task}
-                      frontImageUrl={card.frontImageUrl}
-                      backImageUrl={card.backImageUrl}
-                    />
-                  )
-                )}
+                {(showAllCards ? sortedCards : sortedCards.slice(0, 5)).map((card) => (
+                  <Teaser
+                    key={card._id}
+                    href={`/card/${card.customId}`}
+                    title={card.customId}
+                    subtitle={card.task}
+                    frontImageUrl={card.frontImageUrl}
+                    backImageUrl={card.backImageUrl}
+                    badge={`${card.entryCount || 0} ${(card.entryCount || 0) === 1 ? "entry" : "entries"}`}
+                  />
+                ))}
               </div>
-              {cards.length > 5 && (
+              {sortedCards.length > 5 && (
                 <div className="mt-6 flex justify-center">
                   <button
                     type="button"

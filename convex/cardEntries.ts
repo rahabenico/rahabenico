@@ -30,16 +30,30 @@ export const getAllCards = query({
   handler: async (ctx) => {
     const cards = await ctx.db.query("cards").order("desc").collect();
     
-    // Fetch URLs for front and back images if they exist
+    // Get all entries and group by cardId for efficient counting
+    const allEntries = await ctx.db.query("cardEntries").collect();
+    const entryCountsByCardId = new Map<string, number>();
+    
+    for (const entry of allEntries) {
+      const cardId = entry.cardId;
+      const currentCount = entryCountsByCardId.get(cardId) || 0;
+      entryCountsByCardId.set(cardId, currentCount + 1);
+    }
+    
+    // Fetch URLs for front and back images if they exist, and add entry counts
     const cardsWithUrls = await Promise.all(
       cards.map(async (card) => {
         const frontImageUrl = card.frontImageId ? await ctx.storage.getUrl(card.frontImageId) : null;
         const backImageUrl = card.backImageId ? await ctx.storage.getUrl(card.backImageId) : null;
         
+        // Get entry count from the map
+        const entryCount = entryCountsByCardId.get(card._id) || 0;
+        
         return {
           ...card,
           frontImageUrl,
           backImageUrl,
+          entryCount,
         };
       })
     );
