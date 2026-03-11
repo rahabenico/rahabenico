@@ -55,10 +55,15 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
     }
   }, [gpsError]);
 
+  // Prevent all form submissions except via button click
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <LoadingBar isLoading={formState.isSubmitting} />
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleFormSubmit} className="space-y-6">
         <FieldGroup>
           {/* Username - Required */}
           <Field>
@@ -205,7 +210,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
         </FieldGroup>
 
         <div className="flex justify-end gap-2">
-          <Button type="submit" disabled={formState.isSubmitting}>
+          <Button type="button" onClick={handleSubmit} disabled={formState.isSubmitting}>
             {formState.isSubmitting ? "Saving..." : "Save Entry"}
           </Button>
         </div>
