@@ -20,6 +20,7 @@ interface SuggestionsFieldProps {
   onToggle: () => void;
   isVisible: boolean;
   isTextarea?: boolean;
+  placeholder?: string;
 }
 
 /**
@@ -56,6 +57,7 @@ export function SuggestionsField({
   onToggle,
   isVisible,
   isTextarea = false,
+  placeholder,
 }: SuggestionsFieldProps) {
   if (!isVisible) {
     return (
@@ -78,7 +80,7 @@ export function SuggestionsField({
                 <Textarea
                   value={suggestion.value}
                   onChange={(e) => onUpdate(index, e.target.value)}
-                  placeholder={`${title} ${index + 1}`}
+                  placeholder={placeholder || `${title} ${index + 1}`}
                   className="min-h-16 flex-1"
                   rows={2}
                 />
@@ -86,7 +88,7 @@ export function SuggestionsField({
                 <Input
                   value={suggestion.value}
                   onChange={(e) => onUpdate(index, e.target.value)}
-                  placeholder={`${title} ${index + 1}`}
+                  placeholder={placeholder || `${title} ${index + 1}`}
                   className="flex-1"
                 />
               )}

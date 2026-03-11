@@ -132,11 +132,12 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
             onUpdate={updateArtistSuggestion}
             onToggle={toggleArtistSuggestions}
             isVisible={formState.showArtistSuggestions}
+            placeholder="Enter artist suggestion"
           />
 
           {/* Task Suggestions - Optional */}
           <SuggestionsField
-            title="Task Suggestions"
+            title="Compliment/Task Suggestions"
             suggestions={formState.taskSuggestions}
             onAdd={addTaskSuggestion}
             onRemove={removeTaskSuggestion}
@@ -144,6 +145,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
             onToggle={toggleTaskSuggestions}
             isVisible={formState.showTaskSuggestions}
             isTextarea
+            placeholder="Enter task suggestion"
           />
 
           {/* Notification Subscription - Optional */}
