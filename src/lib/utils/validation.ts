@@ -91,21 +91,22 @@ export function validateEmail(value: string, fieldName: string): ValidationError
 }
 
 /**
- * Validates an entry form with username and date fields
+ * Validates an entry form with username field
+ * Note: Date is automatically set to current time on submit, so it's not validated here
  *
  * @param username - The username value
- * @param date - The date value
+ * @param _date - The date value (unused, kept for backward compatibility)
  * @returns A ValidationResult with validation status and errors
  *
  * @example
  * ```typescript
  * const result = validateEntryForm('', undefined)
  * if (!result.isValid) {
- *   console.log(result.errors) // [{ field: 'username', message: 'Username is required' }, { field: 'date', message: 'Date is required' }]
+ *   console.log(result.errors) // [{ field: 'username', message: 'Username is required' }]
  * }
  * ```
  */
-export function validateEntryForm(username: string, date: Date | undefined): ValidationResult {
+export function validateEntryForm(username: string, _date?: Date | undefined): ValidationResult {
   const errors: ValidationError[] = [];
 
   const usernameError = validateRequired(username, "username");
@@ -113,10 +114,7 @@ export function validateEntryForm(username: string, date: Date | undefined): Val
     errors.push(usernameError);
   }
 
-  const dateError = validateRequiredDate(date, "date");
-  if (dateError) {
-    errors.push(dateError);
-  }
+  // Date validation removed - current time is used automatically on submit
 
   return {
     isValid: errors.length === 0,

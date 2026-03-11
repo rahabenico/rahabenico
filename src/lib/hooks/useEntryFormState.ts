@@ -47,7 +47,6 @@ export interface EntryFormState extends EntryFormData {
  *   const {
  *     formState,
  *     handleInputChange,
- *     handleDateChange,
  *     handleSubmit,
  *     addArtistSuggestion,
  *     removeArtistSuggestion,
@@ -61,10 +60,6 @@ export interface EntryFormState extends EntryFormData {
  *         name="username"
  *         value={formState.username}
  *         onChange={handleInputChange}
- *       />
- *       <DatePicker
- *         date={formState.date}
- *         onChange={handleDateChange}
  *       />
  *       <button type="submit" disabled={formState.isSubmitting}>
  *         {formState.isSubmitting ? 'Saving...' : 'Save Entry'}
@@ -116,18 +111,6 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
 
   const handleFieldChange = (field: keyof EntryFormData, value: EntryFormData[keyof EntryFormData]) => {
     updateFormField(field, value);
-  };
-
-  const handleDateChange = (date: Date | undefined) => {
-    if (date) {
-      // Preserve the current time or set to current time if date was previously undefined
-      const currentDate = formState.date || new Date();
-      const newDate = new Date(date);
-      newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds());
-      updateFormField("date", newDate);
-    } else {
-      updateFormField("date", date);
-    }
   };
 
   const toggleComment = () => {
@@ -262,7 +245,7 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validationResult = validateEntryForm(formState.username, formState.date);
+    const validationResult = validateEntryForm(formState.username, undefined);
 
     // Validate email if notification is requested
     if (formState.wantNotification) {
@@ -288,10 +271,12 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     }));
 
     try {
+      const currentDate = new Date();
+
       await createCardEntry({
         cardId,
         username: formState.username.trim(),
-        date: formState.date!.getTime(),
+        date: currentDate.getTime(),
         gpsPosition: formState.gpsPosition || undefined,
         location: formState.location.trim() || undefined,
         city: formState.city.trim() || undefined,
@@ -335,7 +320,6 @@ export function useEntryFormState(cardId: Id<"cards">, onSuccess?: () => void) {
     formState,
     handleInputChange,
     handleFieldChange,
-    handleDateChange,
     handleSubmit,
     toggleComment,
     toggleInstagram,

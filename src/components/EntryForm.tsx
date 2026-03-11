@@ -1,6 +1,5 @@
 import React from "react";
 import { CommentField } from "@/components/form/CommentField";
-import { DateField } from "@/components/form/DateField";
 import { GPSField } from "@/components/form/GPSField";
 import { InstagramField } from "@/components/form/InstagramField";
 import { SuggestionsField } from "@/components/form/SuggestionsField";
@@ -25,7 +24,6 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
     formState,
     handleInputChange,
     handleFieldChange,
-    handleDateChange,
     handleSubmit,
     toggleComment,
     toggleInstagram,
@@ -110,14 +108,6 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
             </FieldContent>
           </Field>
 
-          {/* Date - Required */}
-          <DateField
-            date={formState.date}
-            onChange={handleDateChange}
-            error={getFieldError(formState.validation.errors, "date")}
-            required
-          />
-
           {/* Comment - Optional */}
           <CommentField
             value={formState.comment}
@@ -173,7 +163,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
 
           {/* Notification Subscription - Optional */}
           <Field orientation="horizontal">
-            <FieldContent>
+            <FieldContent className="flex items-center gap-1">
               <Checkbox
                 id="wantNotification"
                 checked={formState.wantNotification}
@@ -191,7 +181,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
               <FieldLabel>
                 <Label htmlFor="notificationEmail">Email Address *</Label>
               </FieldLabel>
-              <FieldContent>
+              <FieldContent className="flex items-center gap-1">
                 <Input
                   id="notificationEmail"
                   name="notificationEmail"
