@@ -91,14 +91,13 @@ function CardView() {
             <SheetTrigger asChild>
               <FloatingButton aria-label="Open form">Add entry</FloatingButton>
             </SheetTrigger>
-            <SheetContent side="bottom">
+            <SheetContent side="bottom" className="max-h-[90vh] overflow-y-scroll overscroll-none">
               <SheetHeader>
                 <SheetTitle>Add Entry</SheetTitle>
                 <SheetDescription>Fill out the form below to add an entry to this card.</SheetDescription>
               </SheetHeader>
-              <div className="mt-6">
-                <EntryForm cardId={card._id} onSuccess={handleSuccess} />
-              </div>
+
+              <EntryForm cardId={card._id} onSuccess={handleSuccess} />
             </SheetContent>
           </Sheet>
         )}

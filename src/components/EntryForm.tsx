@@ -61,7 +61,7 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
   return (
     <>
       <LoadingBar isLoading={formState.isSubmitting} />
-      <form onSubmit={handleFormSubmit} className="space-y-6">
+      <form onSubmit={handleFormSubmit}>
         <FieldGroup>
           {/* Username - Required */}
           <Field>
@@ -150,28 +150,32 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
           {/* Interested in Buying - Optional */}
           <Field orientation="horizontal">
             <FieldContent>
-              <Checkbox
-                id="interestedInBuying"
-                checked={formState.interestedInBuying}
-                onCheckedChange={(checked) => handleFieldChange("interestedInBuying", checked)}
-              />
-              <Label htmlFor="interestedInBuying" className="cursor-pointer font-normal text-sm">
-                Would you be interested in buying your own set of cards in the future?
-              </Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="interestedInBuying"
+                  checked={formState.interestedInBuying}
+                  onCheckedChange={(checked) => handleFieldChange("interestedInBuying", checked)}
+                />
+                <Label htmlFor="interestedInBuying" className="cursor-pointer font-normal text-sm">
+                  Would you be interested in buying your own set of cards in the future?
+                </Label>
+              </div>
             </FieldContent>
           </Field>
 
           {/* Notification Subscription - Optional */}
           <Field orientation="horizontal">
-            <FieldContent className="flex items-center gap-1">
-              <Checkbox
-                id="wantNotification"
-                checked={formState.wantNotification}
-                onCheckedChange={toggleNotification}
-              />
-              <Label htmlFor="wantNotification" className="cursor-pointer font-normal text-sm">
-                You want to be notified if there is a new entry to this card?
-              </Label>
+            <FieldContent>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="wantNotification"
+                  checked={formState.wantNotification}
+                  onCheckedChange={toggleNotification}
+                />
+                <Label htmlFor="wantNotification" className="cursor-pointer font-normal text-sm">
+                  You want to be notified if there is a new entry to this card?
+                </Label>
+              </div>
             </FieldContent>
           </Field>
 
@@ -199,9 +203,9 @@ export function EntryForm({ cardId, onSuccess }: EntryFormProps) {
           )}
         </FieldGroup>
 
-        <div className="flex justify-end gap-2">
-          <Button type="button" onClick={handleSubmit} disabled={formState.isSubmitting}>
-            {formState.isSubmitting ? "Saving..." : "Save Entry"}
+        <div className="sticky right-0 bottom-0 left-0 z-10 border-border border-t bg-background p-4">
+          <Button type="button" onClick={handleSubmit} disabled={formState.isSubmitting} className="w-full">
+            {formState.isSubmitting ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>

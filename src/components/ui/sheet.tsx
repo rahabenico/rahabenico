@@ -46,7 +46,7 @@ function SheetContent({
         data-slot="sheet-content"
         data-side={side}
         className={cn(
-          "data-closed:fade-out-0 data-open:fade-in-0 fixed z-50 gap-4 bg-background p-6 ring-1 ring-foreground/10 duration-100 data-closed:animate-out data-open:animate-in",
+          "data-closed:fade-out-0 data-open:fade-in-0 fixed z-50 gap-4 bg-background ring-1 ring-foreground/10 duration-100 data-closed:animate-out data-open:animate-in",
           side === "top" && "data-closed:slide-out-to-top data-open:slide-in-from-top inset-x-0 top-0 border-b",
           side === "bottom" &&
             "data-closed:slide-out-to-bottom data-open:slide-in-from-bottom inset-x-0 bottom-0 border-t",
@@ -66,7 +66,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-header"
-      className={cn("flex flex-col space-y-2 text-center sm:text-left", className)}
+      className={cn("flex flex-col space-y-2 px-6 pt-6 text-center sm:text-left", className)}
       {...props}
     />
   );
