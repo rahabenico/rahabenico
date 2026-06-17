@@ -71,7 +71,7 @@ function Support() {
           </section>
           <div className="flex justify-center">
             <a
-              href="https://www.paypal.com/pool/9miVHfr9hD?sr=ancr"
+              href="https://www.paypal.com/pool/9q56AKO7NE?sr=accr"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-primary px-4 py-2 text-white hover:bg-primary/80"
